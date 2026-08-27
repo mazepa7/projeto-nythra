@@ -1,0 +1,32 @@
+.container{
+
+    width:min(1280px,90%);
+    margin:auto;
+
+}
+
+.flex{
+
+    display:flex;
+
+}
+
+.center{
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+}
+
+.grid{
+
+    display:grid;
+
+}
+
+.hidden{
+
+    display:none;
+
+}   

@@ -1,0 +1,1108 @@
+/* =========================
+   CODEx - Landing Page
+   Home Style
+========================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+
+:root {
+    --background: #080812;
+    --background-secondary: #10101c;
+
+    --primary: #8b5cf6;
+    --primary-hover: #a78bfa;
+
+    --text: #f5f5f5;
+    --text-secondary: #a1a1aa;
+
+    --card: rgba(255,255,255,0.05);
+    --border: rgba(255,255,255,0.1);
+
+    --shadow: 0 20px 50px rgba(0,0,0,.4);
+}
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Inter", sans-serif;
+}
+
+
+body {
+    min-height: 100vh;
+    background:
+        radial-gradient(
+            circle at top,
+            rgba(139,92,246,.25),
+            transparent 35%
+        ),
+        var(--background);
+
+    color: var(--text);
+}
+
+
+/* =========================
+        HEADER
+========================= */
+
+
+header {
+
+    width: 100%;
+    padding: 30px 8%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+}
+
+
+.logo {
+
+    font-size: 28px;
+    font-weight: 800;
+
+    letter-spacing: -1px;
+
+}
+
+
+.logo span {
+
+    color: var(--primary);
+
+}
+
+
+
+nav {
+
+    display: flex;
+    gap: 30px;
+
+}
+
+
+nav a {
+
+    text-decoration: none;
+    color: var(--text-secondary);
+
+    transition: .3s;
+
+}
+
+
+nav a:hover {
+
+    color: var(--text);
+
+}
+
+
+
+/* =========================
+        HERO
+========================= */
+
+
+.hero {
+
+    min-height: calc(100vh - 100px);
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+
+    padding: 0 20px;
+
+}
+
+
+.hero h1 {
+
+    max-width: 900px;
+
+    font-size: clamp(40px,5vw,72px);
+
+    line-height: 1.05;
+
+    font-weight: 800;
+
+    letter-spacing: -3px;
+
+}
+
+
+.hero h1 span {
+
+    color: var(--primary);
+
+}
+
+
+
+.hero p {
+
+    margin-top: 25px;
+
+    max-width: 650px;
+
+    color: var(--text-secondary);
+
+    font-size: 18px;
+
+    line-height: 1.6;
+
+}
+
+
+
+/* =========================
+        OPTIONS
+========================= */
+
+
+.options{
+
+    margin-top:70px;
+
+    display:grid;
+
+    grid-template-columns:repeat(2,420px);
+
+    justify-content:center;
+
+    gap:40px;
+
+}
+
+
+
+.option-card {
+
+
+    padding: 40px;
+
+    background: var(--card);
+
+    border: 1px solid var(--border);
+
+    border-radius: 24px;
+
+    backdrop-filter: blur(15px);
+
+    box-shadow: var(--shadow);
+
+    text-align: left;
+
+    transition: .35s;
+
+}
+
+
+
+.option-card:hover {
+
+    transform: translateY(-10px);
+
+    border-color: rgba(139,92,246,.5);
+
+}
+
+
+
+
+.option-icon {
+
+    width: 60px;
+    height: 60px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+
+    border-radius: 16px;
+
+
+    background: rgba(139,92,246,.15);
+
+    color: var(--primary);
+
+    font-size: 28px;
+
+    margin-bottom: 25px;
+
+}
+
+
+
+.option-card h2 {
+
+    font-size: 26px;
+
+    margin-bottom: 12px;
+
+}
+
+
+
+.option-card p {
+
+    font-size: 15px;
+
+    color: var(--text-secondary);
+
+    margin-bottom: 30px;
+
+}
+
+
+
+
+/* =========================
+        BUTTONS
+========================= */
+
+
+.btn {
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 14px 28px;
+
+    border-radius: 12px;
+
+    text-decoration: none;
+
+    font-weight: 600;
+
+    transition: .3s;
+
+}
+
+
+
+.btn-primary {
+
+    background: var(--primary);
+
+    color:white;
+
+}
+
+
+
+.btn-primary:hover {
+
+    background: var(--primary-hover);
+
+    transform: scale(1.05);
+
+}
+
+
+
+
+.btn-outline {
+
+
+    border:1px solid var(--border);
+
+    color:white;
+
+}
+
+
+
+.btn-outline:hover {
+
+
+    border-color:var(--primary);
+
+    color:var(--primary);
+
+}
+
+
+
+/* =========================
+        DECORATION
+========================= */
+
+
+.glow {
+
+    position:absolute;
+
+    width:400px;
+    height:400px;
+
+    background:var(--primary);
+
+    filter:blur(150px);
+
+    opacity:.15;
+
+    z-index:-1;
+
+}
+
+
+
+.glow.one {
+
+    top:10%;
+    left:10%;
+
+}
+
+
+
+.glow.two {
+
+    bottom:10%;
+    right:10%;
+
+}
+
+
+
+
+/* =========================
+        RESPONSIVO
+========================= */
+
+
+@media(max-width:800px){
+
+
+    header {
+
+        padding:25px;
+
+    }
+
+
+    nav {
+
+        display:none;
+
+    }
+
+
+    .role-card{
+
+    width:100%;
+
+    max-width:420px;
+
+}
+
+   .options{
+
+    grid-template-columns:1fr;
+
+    justify-items:center;
+
+    width:100%;
+
+}
+
+
+    .option-card {
+
+        padding:30px;
+
+    }
+
+}
+
+/* =========================
+        COMPONENTES CODEX
+========================= */
+
+
+/* ---------- CARDS PRINCIPAIS ---------- */
+
+
+.role-card{
+
+    position:relative;
+
+    overflow:hidden;
+
+    display:flex;
+
+    flex-direction:column;
+
+    min-height:520px;
+
+    padding:42px;
+
+    border-radius:28px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.08),
+            rgba(255,255,255,.03)
+        );
+
+    border:1px solid rgba(255,255,255,.12);
+
+    backdrop-filter:blur(20px);
+
+    transition:.35s;
+
+}
+
+
+
+.role-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:260px;
+    height:260px;
+
+    border-radius:50%;
+
+    background:var(--primary);
+
+    filter:blur(100px);
+
+    opacity:.12;
+
+    top:-120px;
+    right:-120px;
+
+}
+
+
+
+.role-card:hover{
+
+    transform:translateY(-12px);
+
+    border-color:rgba(139,92,246,.45);
+
+    box-shadow:
+    0 20px 60px rgba(139,92,246,.15);
+
+}
+
+
+.role-card h2 {
+
+    font-size:32px;
+
+    margin-bottom:15px;
+
+}
+
+
+
+.role-card p{
+
+    color:var(--text-secondary);
+
+    line-height:1.7;
+
+    margin-bottom:30px;
+
+}
+
+
+
+
+/* ---------- ÍCONES ---------- */
+
+
+.card-icon{
+
+    width:72px;
+    height:72px;
+
+    display:flex;
+
+    justify-content:center;
+    align-items:center;
+
+    flex-shrink:0;
+
+    border-radius:20px;
+
+    background:rgba(139,92,246,.15);
+
+    border:1px solid rgba(139,92,246,.35);
+
+    font-size:32px;
+
+}
+
+/* ---------- CARD ---------- */
+
+.card-features{
+
+    list-style:none;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:18px;
+
+    margin-bottom:40px;
+
+}
+
+.card-features li{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    color:var(--text-secondary);
+
+}
+
+.card-features li::before{
+
+    content:"✓";
+
+    color:var(--primary);
+
+    font-weight:700;
+
+}
+
+.role-card .btn{
+
+    margin-top:auto;
+
+    width:100%;
+
+}
+
+.master{
+
+    border-color:rgba(168,85,247,.25);
+
+}
+
+.master .card-icon{
+
+    color:#c084fc;
+
+}
+
+.player{
+
+    border-color:rgba(96,165,250,.25);
+
+}
+
+.player .card-icon{
+
+    background:rgba(96,165,250,.15);
+
+    border-color:rgba(96,165,250,.35);
+
+    color:#60a5fa;
+
+}
+
+/* ---------- HEADER DE CARD ---------- */
+
+.card-header{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:20px;
+
+    margin-bottom:28px;
+
+}
+
+.card-header h2{
+
+    font-size:30px;
+
+    margin-bottom:6px;
+
+}
+
+.card-header span{
+
+    color:var(--text-secondary);
+
+    font-size:14px;
+
+}
+
+/* ---------- BOTÕES ---------- */
+
+
+.btn {
+
+
+    position:relative;
+
+    overflow:hidden;
+
+
+    cursor:pointer;
+
+
+    border:none;
+
+
+}
+
+
+
+.btn::after {
+
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+
+    background:white;
+
+    opacity:0;
+
+
+    transition:.3s;
+
+}
+
+
+.btn:hover::after {
+
+    opacity:.08;
+
+}
+
+
+
+
+
+.btn-primary {
+
+
+    background:
+
+    linear-gradient(
+        135deg,
+        #8b5cf6,
+        #6d28d9
+    );
+
+
+    box-shadow:
+
+    0 10px 30px rgba(139,92,246,.3);
+
+
+}
+
+
+
+
+.btn-secondary {
+
+
+    background:
+
+    rgba(255,255,255,.06);
+
+
+    border:1px solid rgba(255,255,255,.15);
+
+
+    color:white;
+
+
+}
+
+
+
+
+.btn-danger {
+
+
+    background:
+
+    linear-gradient(
+        135deg,
+        #ef4444,
+        #991b1b
+    );
+
+}
+
+
+
+.btn-success {
+
+
+    background:
+
+    linear-gradient(
+        135deg,
+        #22c55e,
+        #15803d
+    );
+
+}
+
+
+
+
+/* ---------- BOTÃO GRANDE ---------- */
+
+
+.btn-large {
+
+
+    padding:18px 40px;
+
+    font-size:16px;
+
+    border-radius:16px;
+
+}
+
+
+
+
+/* ---------- CARDS DE CAMPANHA ---------- */
+
+
+.campaign-card {
+
+
+    padding:25px;
+
+
+    background:
+
+    rgba(255,255,255,.04);
+
+
+    border:
+
+    1px solid rgba(255,255,255,.1);
+
+
+    border-radius:20px;
+
+
+    transition:.3s;
+
+}
+
+
+
+.campaign-card:hover {
+
+
+    background:
+
+    rgba(255,255,255,.07);
+
+
+    transform:translateY(-5px);
+
+}
+
+
+
+
+.campaign-cover {
+
+
+    height:180px;
+
+
+    border-radius:15px;
+
+
+    background:
+
+    linear-gradient(
+        135deg,
+        #312e81,
+        #111827
+    );
+
+
+    margin-bottom:20px;
+
+
+}
+
+
+
+
+.campaign-title {
+
+
+    font-size:22px;
+
+    font-weight:700;
+
+
+}
+
+
+
+.campaign-info {
+
+
+    display:flex;
+
+    gap:10px;
+
+    margin-top:15px;
+
+}
+
+
+
+/* ---------- TAGS ---------- */
+
+
+.tag {
+
+
+    padding:6px 12px;
+
+
+    border-radius:999px;
+
+
+    font-size:12px;
+
+
+    background:
+
+    rgba(139,92,246,.15);
+
+
+    color:#c4b5fd;
+
+
+    border:
+
+    1px solid rgba(139,92,246,.3);
+
+}
+
+
+
+
+
+.tag.gray {
+
+
+    background:
+
+    rgba(255,255,255,.08);
+
+
+    color:#d4d4d8;
+
+
+}
+
+
+
+/* ---------- INPUTS ---------- */
+
+
+.input {
+
+
+    width:100%;
+
+
+    padding:15px 18px;
+
+
+    border-radius:14px;
+
+
+    background:
+
+    rgba(255,255,255,.05);
+
+
+    border:
+
+    1px solid rgba(255,255,255,.12);
+
+
+    color:white;
+
+
+    outline:none;
+
+
+    transition:.3s;
+
+
+}
+
+
+
+.input:focus {
+
+
+    border-color:var(--primary);
+
+
+    box-shadow:
+
+    0 0 20px rgba(139,92,246,.2);
+
+
+}
+
+
+
+/* ---------- MODAL ---------- */
+
+
+.modal {
+
+
+    background:
+
+    #10101c;
+
+
+    border:
+
+    1px solid rgba(255,255,255,.1);
+
+
+    border-radius:25px;
+
+
+    padding:35px;
+
+
+    box-shadow:var(--shadow);
+
+
+}
+
+
+
+/* ---------- PROGRESS BAR ---------- */
+
+
+.progress {
+
+
+    width:100%;
+
+
+    height:10px;
+
+
+    background:
+
+    rgba(255,255,255,.1);
+
+
+    border-radius:999px;
+
+
+    overflow:hidden;
+
+}
+
+
+
+.progress-fill {
+
+
+    height:100%;
+
+
+    width:70%;
+
+
+    background:
+
+    linear-gradient(
+        90deg,
+        #8b5cf6,
+        #c084fc
+    );
+
+
+}
+
+
+
+/* ---------- AVATAR ---------- */
+
+
+.avatar {
+
+         
+    width:50px;
+
+    height:50px;
+
+
+    border-radius:50%;
+
+
+    background:
+
+    linear-gradient(
+        135deg,
+        #8b5cf6,
+        #312e81
+    );
+
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+
+    font-weight:700;
+
+}

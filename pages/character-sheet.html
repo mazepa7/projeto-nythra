@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Ficha interativa de Ordem Paranormal no Nythra." />
+    <title>Ficha de agente | Nythra</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../styles/pages/character-sheet.css" />
+  </head>
+
+  <body>
+    <header class="app-header container">
+      <a class="logo" href="index.html">Nythra<span>.</span></a>
+      <div class="header-actions">
+        <span class="save-status" id="save-status" role="status">Alterações salvas localmente</span>
+        <a class="back-link" href="dashboard.html">← Minhas fichas</a>
+      </div>
+    </header>
+
+    <main class="sheet container">
+      <section class="agent-header" aria-labelledby="agent-name-label">
+        <div class="agent-mark" aria-hidden="true">OP</div>
+        <div class="agent-identity">
+          <p class="eyebrow">Ficha de agente · Ordem Paranormal</p>
+          <label id="agent-name-label" class="sr-only" for="agent-name">Nome do personagem</label>
+          <input id="agent-name" class="agent-name-input" type="text" value="Novo agente" maxlength="50" />
+          <div class="agent-details">
+            <label>Jogador <input id="player-name" type="text" value="" placeholder="Seu nome" /></label>
+            <label>Origem <input id="origin" type="text" value="" placeholder="Não definida" /></label>
+          </div>
+        </div>
+        <div class="agent-selects">
+          <label for="character-class">Classe
+            <select id="character-class">
+              <option>Combatente</option>
+              <option>Especialista</option>
+              <option>Ocultista</option>
+            </select>
+          </label>
+          <label for="nex">NEX
+            <select id="nex">
+              <option value="5">5%</option><option value="10">10%</option><option value="15">15%</option><option value="20">20%</option><option value="25">25%</option><option value="30">30%</option><option value="35">35%</option><option value="40">40%</option><option value="45">45%</option><option value="50">50%</option><option value="55">55%</option><option value="60">60%</option><option value="65">65%</option><option value="70">70%</option><option value="75">75%</option><option value="80">80%</option><option value="85">85%</option><option value="90">90%</option><option value="95">95%</option><option value="99">99%</option>
+            </select>
+          </label>
+        </div>
+      </section>
+
+      <div class="sheet-layout">
+        <aside class="sheet-sidebar">
+          <section class="sheet-card attributes-card" aria-labelledby="attributes-title">
+            <div class="section-heading"><p class="eyebrow">Base</p><h2 id="attributes-title">Atributos</h2></div>
+            <div class="attributes-list">
+              <label class="attribute"><span><b>AGI</b> Agilidade</span><input id="agi" data-field="agi" type="number" min="0" max="5" value="1" /></label>
+              <label class="attribute"><span><b>FOR</b> Força</span><input id="for" data-field="for" type="number" min="0" max="5" value="1" /></label>
+              <label class="attribute"><span><b>INT</b> Intelecto</span><input id="int" data-field="int" type="number" min="0" max="5" value="1" /></label>
+              <label class="attribute"><span><b>PRE</b> Presença</span><input id="pre" data-field="pre" type="number" min="0" max="5" value="1" /></label>
+              <label class="attribute"><span><b>VIG</b> Vigor</span><input id="vig" data-field="vig" type="number" min="0" max="5" value="1" /></label>
+            </div>
+          </section>
+
+          <section class="sheet-card" aria-labelledby="defense-title">
+            <div class="section-heading"><p class="eyebrow">Combate</p><h2 id="defense-title">Defesa</h2></div>
+            <label class="inline-number" for="defense">Defesa <input id="defense" data-field="defense" type="number" min="0" value="10" /></label>
+          </section>
+        </aside>
+
+        <div class="sheet-content">
+          <section class="resources" aria-label="Recursos do personagem">
+            <article class="resource-card resource-pv">
+              <p>Vida</p>
+              <div class="resource-values"><input id="current-pv" data-resource="pv" type="number" min="0" value="21" aria-label="Pontos de vida atuais" /><span>/</span><output id="max-pv">21</output></div>
+              <small id="pv-formula">20 + 1 de Vigor</small>
+              <div class="resource-bar"><span id="pv-bar"></span></div>
+            </article>
+            <article class="resource-card resource-pe">
+              <p>Esforço</p>
+              <div class="resource-values"><input id="current-pe" data-resource="pe" type="number" min="0" value="3" aria-label="Pontos de esforço atuais" /><span>/</span><output id="max-pe">3</output></div>
+              <small id="pe-formula">2 + 1 de Presença</small>
+              <div class="resource-bar"><span id="pe-bar"></span></div>
+            </article>
+            <article class="resource-card resource-san">
+              <p>Sanidade</p>
+              <div class="resource-values"><input id="current-san" data-resource="san" type="number" min="0" value="12" aria-label="Sanidade atual" /><span>/</span><output id="max-san">12</output></div>
+              <small id="san-formula">12 inicial</small>
+              <div class="resource-bar"><span id="san-bar"></span></div>
+            </article>
+          </section>
+
+          <section class="sheet-card details-card" aria-labelledby="details-title">
+            <div class="section-heading"><p class="eyebrow">Personagem</p><h2 id="details-title">Detalhes da ficha</h2></div>
+            <div class="details-grid">
+              <label>Trilha <input id="trail" data-field="trail" type="text" placeholder="Defina ao atingir NEX 10%" /></label>
+              <label>Patente <input id="rank" data-field="rank" type="text" value="Recruta" /></label>
+              <label class="wide-field">Descrição <textarea id="description" data-field="description" rows="5" placeholder="Aparência, personalidade, história e outras anotações do agente."></textarea></label>
+            </div>
+          </section>
+
+          <section class="sheet-card skills-card" aria-labelledby="skills-title">
+            <div class="section-heading"><p class="eyebrow">Perícias</p><h2 id="skills-title">Bônus de perícia</h2><p>Edite o treinamento diretamente; os atributos permanecem visíveis para agilizar as rolagens.</p></div>
+            <div class="skills-grid">
+              <label>Acrobacia <span>AGI</span><input data-skill="Acrobacia" type="number" value="0" /></label>
+              <label>Atletismo <span>FOR</span><input data-skill="Atletismo" type="number" value="0" /></label>
+              <label>Fortitude <span>VIG</span><input data-skill="Fortitude" type="number" value="0" /></label>
+              <label>Furtividade <span>AGI</span><input data-skill="Furtividade" type="number" value="0" /></label>
+              <label>Investigação <span>INT</span><input data-skill="Investigação" type="number" value="0" /></label>
+              <label>Ocultismo <span>INT</span><input data-skill="Ocultismo" type="number" value="0" /></label>
+              <label>Percepção <span>PRE</span><input data-skill="Percepção" type="number" value="0" /></label>
+              <label>Reflexos <span>AGI</span><input data-skill="Reflexos" type="number" value="0" /></label>
+              <label>Vontade <span>PRE</span><input data-skill="Vontade" type="number" value="0" /></label>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+    <script src="js/character-sheet.js"></script>
+  </body>
+</html>
