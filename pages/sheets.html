@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <meta
+    name="description"
+    content="Gerencie seus personagens e fichas no Nythra."
+  />
+
+  <title>Minhas Fichas | Nythra</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  />
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../styles/pages/sheets.css"
+  />
+</head>
+
+
+<body>
+
+  <!-- ============================= -->
+  <!-- HEADER -->
+  <!-- ============================= -->
+
+  <header class="topbar">
+
+    <div class="topbar-container">
+
+      <a
+        href="../index.html"
+        class="brand"
+        aria-label="Página inicial do Nythra"
+      >
+
+        <span
+          class="brand-mark"
+          aria-hidden="true"
+        >
+          N
+        </span>
+
+        <span class="brand-name">
+          Nythra
+        </span>
+
+      </a>
+
+
+      <div class="topbar-actions">
+
+        <div class="user-chip">
+
+          <div
+            class="user-avatar"
+            id="user-avatar"
+            aria-hidden="true"
+          >
+            ?
+          </div>
+
+          <div class="user-info">
+
+            <span class="user-label">
+              Conectado como
+            </span>
+
+            <span
+              class="user-name"
+              id="user-name"
+            >
+              Carregando...
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <button
+          class="button button-ghost logout-button"
+          id="logout-button"
+          type="button"
+        >
+          Sair
+        </button>
+
+      </div>
+
+    </div>
+
+  </header>
+
+
+  <!-- ============================= -->
+  <!-- CONTEÚDO -->
+  <!-- ============================= -->
+
+  <main class="page-container">
+
+    <section class="page-heading">
+
+      <div>
+
+        <p class="eyebrow">
+          Seus personagens
+        </p>
+
+        <h1>
+          Minhas fichas
+        </h1>
+
+        <p class="page-description">
+          Gerencie seus personagens e continue suas aventuras.
+        </p>
+
+      </div>
+
+
+      <button
+        class="button button-primary new-sheet-button"
+        id="new-sheet-button"
+        type="button"
+      >
+
+        <span
+          class="button-icon"
+          aria-hidden="true"
+        >
+          +
+        </span>
+
+        Nova ficha
+
+      </button>
+
+    </section>
+
+
+
+    <!-- ============================= -->
+    <!-- LOADING -->
+    <!-- ============================= -->
+
+    <section
+      class="state-container"
+      id="loading-state"
+      aria-live="polite"
+    >
+
+      <div class="loader"></div>
+
+      <p>
+        Carregando suas fichas...
+      </p>
+
+    </section>
+
+
+
+    <!-- ============================= -->
+    <!-- ESTADO VAZIO -->
+    <!-- ============================= -->
+
+    <section
+      class="empty-state hidden"
+      id="empty-state"
+    >
+
+      <div
+        class="empty-icon"
+        aria-hidden="true"
+      >
+        ✦
+      </div>
+
+      <p class="eyebrow">
+        O começo de uma história
+      </p>
+
+      <h2>
+        Nenhuma ficha por aqui ainda.
+      </h2>
+
+      <p>
+        Sua próxima aventura começa com um personagem.
+        Crie sua primeira ficha para começar.
+      </p>
+
+
+      <button
+        class="button button-primary"
+        id="empty-create-button"
+        type="button"
+      >
+
+        <span
+          class="button-icon"
+          aria-hidden="true"
+        >
+          +
+        </span>
+
+        Criar primeira ficha
+
+      </button>
+
+    </section>
+
+
+
+    <!-- ============================= -->
+    <!-- GRID DE FICHAS -->
+    <!-- ============================= -->
+
+    <section
+      class="sheets-section hidden"
+      id="sheets-section"
+      aria-labelledby="sheets-title"
+    >
+
+      <div class="section-header">
+
+        <h2 id="sheets-title">
+          Personagens
+        </h2>
+
+        <span
+          class="sheet-count"
+          id="sheet-count"
+        >
+          0 fichas
+        </span>
+
+      </div>
+
+
+      <div
+        class="sheets-grid"
+        id="sheets-grid"
+      >
+        <!-- Cards criados pelo JavaScript -->
+      </div>
+
+    </section>
+
+  </main>
+
+
+
+  <!-- ============================= -->
+  <!-- MODAL CRIAR FICHA -->
+  <!-- ============================= -->
+
+  <div
+    class="modal-backdrop hidden"
+    id="create-modal"
+    aria-hidden="true"
+  >
+
+    <div
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="create-modal-title"
+    >
+
+      <div class="modal-header">
+
+        <div>
+
+          <p class="eyebrow">
+            Nova aventura
+          </p>
+
+          <h2 id="create-modal-title">
+            Criar ficha
+          </h2>
+
+        </div>
+
+
+        <button
+          class="modal-close"
+          id="close-modal-button"
+          type="button"
+          aria-label="Fechar"
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <form
+        class="create-form"
+        id="create-sheet-form"
+      >
+
+        <div class="form-field">
+
+          <label for="character-name">
+            Nome do personagem
+          </label>
+
+          <input
+            id="character-name"
+            name="character-name"
+            type="text"
+            placeholder="Ex: Arthur Cervero"
+            minlength="2"
+            maxlength="80"
+            autocomplete="off"
+            required
+          />
+
+        </div>
+
+
+        <div class="form-field">
+
+          <label for="character-system">
+            Sistema
+          </label>
+
+          <select
+            id="character-system"
+            name="character-system"
+            required
+          >
+
+            <option
+              value="ordem_paranormal"
+              selected
+            >
+              Ordem Paranormal
+            </option>
+
+            <option
+              value="dnd"
+              disabled
+            >
+              Dungeons & Dragons — Em breve
+            </option>
+
+            <option
+              value="jjk"
+              disabled
+            >
+              Jujutsu Kaisen — Em breve
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <p
+          class="form-message hidden"
+          id="create-message"
+        ></p>
+
+
+        <div class="modal-actions">
+
+          <button
+            class="button button-secondary"
+            id="cancel-create-button"
+            type="button"
+          >
+            Cancelar
+          </button>
+
+
+          <button
+            class="button button-primary"
+            id="create-sheet-button"
+            type="submit"
+          >
+            Criar ficha
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- ============================= -->
+  <!-- TOAST -->
+  <!-- ============================= -->
+
+  <div
+    class="toast hidden"
+    id="toast"
+    role="status"
+    aria-live="polite"
+  ></div>
+
+
+
+  <!-- ============================= -->
+  <!-- JAVASCRIPT -->
+  <!-- ============================= -->
+
+  <script src="../scripts/api.js"></script>
+  <script src="../scripts/sheets.js"></script>
+
+</body>
+
+</html>

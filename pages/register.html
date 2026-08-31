@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta
+      name="description"
+      content="Crie sua conta no Nythra e comece sua próxima aventura."
+    />
+
+    <title>Criar conta | Nythra</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="../styles/pages/login.css" />
+  </head>
+
+  <body class="login-page">
+
+    <main class="login-layout">
+
+      <section
+        class="login-showcase"
+        aria-labelledby="showcase-title"
+      >
+
+        <a
+          class="brand"
+          href="../index.html"
+          aria-label="Página inicial do Nythra"
+        >
+          <span class="brand-mark" aria-hidden="true">N</span>
+          <span class="brand-name">Nythra</span>
+        </a>
+
+        <div class="showcase-content">
+
+          <p class="eyebrow">
+            Uma nova aventura
+          </p>
+
+          <h1 id="showcase-title">
+            Create your story.
+          </h1>
+
+          <p class="showcase-description">
+            Crie sua conta e mantenha seus personagens,
+            campanhas e aventuras sempre com você.
+          </p>
+
+        </div>
+
+        <p class="showcase-footer">
+          You choose the adventure.
+        </p>
+
+      </section>
+
+
+      <section
+        class="login-panel"
+        aria-labelledby="register-title"
+      >
+
+        <div class="login-card">
+
+          <header class="login-header">
+
+            <p class="eyebrow">
+              Comece agora
+            </p>
+
+            <h2 id="register-title">
+              Criar sua conta
+            </h2>
+
+            <p>
+              Sua próxima aventura começa aqui.
+            </p>
+
+          </header>
+
+
+          <form
+            class="login-form"
+            id="register-form"
+          >
+
+            <div class="form-field">
+
+              <label for="username">
+                Nome de usuário
+              </label>
+
+              <input
+                id="username"
+                name="username"
+                type="text"
+                placeholder="Como devemos chamar você?"
+                autocomplete="username"
+                minlength="3"
+                maxlength="30"
+                required
+              />
+
+            </div>
+
+
+            <div class="form-field">
+
+              <label for="email">
+                E-mail
+              </label>
+
+              <input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="voce@email.com"
+                autocomplete="email"
+                required
+              />
+
+            </div>
+
+
+            <div class="form-field">
+
+              <label for="password">
+                Senha
+              </label>
+
+              <input
+                id="password"
+                name="password"
+                type="password"
+                placeholder="Mínimo de 8 caracteres"
+                autocomplete="new-password"
+                minlength="8"
+                required
+              />
+
+            </div>
+
+
+            <div class="form-field">
+
+              <label for="confirm-password">
+                Confirmar senha
+              </label>
+
+              <input
+                id="confirm-password"
+                name="confirm-password"
+                type="password"
+                placeholder="Digite sua senha novamente"
+                autocomplete="new-password"
+                minlength="8"
+                required
+              />
+
+            </div>
+
+
+            <p
+              class="form-message hidden"
+              id="register-message"
+            ></p>
+
+
+            <button
+              class="button button-primary"
+              id="register-button"
+              type="submit"
+            >
+              Criar conta
+            </button>
+
+          </form>
+
+
+          <p class="signup-prompt">
+
+            Já possui uma conta?
+
+            <a
+              href="login.html"
+              class="text-link"
+            >
+              Entrar
+            </a>
+
+          </p>
+
+        </div>
+
+      </section>
+
+    </main>
+
+
+    <script src="../scripts/api.js"></script>
+    <script src="../scripts/register.js"></script>
+
+  </body>
+</html>

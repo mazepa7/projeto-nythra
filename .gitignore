@@ -6,3 +6,27 @@ node_modules/
 dist/
 .env
 .env.*  
+
+# Segredos
+.env
+.env.*
+!.env.example
+
+# Node
+node_modules/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Uploads de usuários
+uploads/
+
+# Banco / backups
+*.sql
+*.dump
+*.backup
+
+# Sistema
+.DS_Store
+Thumbs.db
