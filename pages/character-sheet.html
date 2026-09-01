@@ -99,23 +99,523 @@
           </section>
 
           <section class="sheet-card skills-card" aria-labelledby="skills-title">
-            <div class="section-heading"><p class="eyebrow">Perícias</p><h2 id="skills-title">Bônus de perícia</h2><p>Edite o treinamento diretamente; os atributos permanecem visíveis para agilizar as rolagens.</p></div>
-            <div class="skills-grid">
-              <label>Acrobacia <span>AGI</span><input data-skill="Acrobacia" type="number" value="0" /></label>
-              <label>Atletismo <span>FOR</span><input data-skill="Atletismo" type="number" value="0" /></label>
-              <label>Fortitude <span>VIG</span><input data-skill="Fortitude" type="number" value="0" /></label>
-              <label>Furtividade <span>AGI</span><input data-skill="Furtividade" type="number" value="0" /></label>
-              <label>Investigação <span>INT</span><input data-skill="Investigação" type="number" value="0" /></label>
-              <label>Ocultismo <span>INT</span><input data-skill="Ocultismo" type="number" value="0" /></label>
-              <label>Percepção <span>PRE</span><input data-skill="Percepção" type="number" value="0" /></label>
-              <label>Reflexos <span>AGI</span><input data-skill="Reflexos" type="number" value="0" /></label>
-              <label>Vontade <span>PRE</span><input data-skill="Vontade" type="number" value="0" /></label>
+  <div class="section-heading">
+    <p class="eyebrow">Perícias</p>
+    <h2 id="skills-title">Testes de perícia</h2>
+    <p>
+      Clique em uma perícia para realizar o teste. Altere o atributo
+      quando o mestre solicitar uma combinação diferente.
+    </p>
+  </div>
+
+  <div class="skills-grid">
+
+    <div class="skill-row">
+      <button class="skill-roll" type="button" data-roll-skill="Acrobacia">
+        Acrobacia
+      </button>
+      <select class="skill-attribute" aria-label="Atributo de Acrobacia">
+        <option value="agi" selected>AGI</option>
+        <option value="for">FOR</option>
+        <option value="int">INT</option>
+        <option value="pre">PRE</option>
+        <option value="vig">VIG</option>
+      </select>
+      <input data-skill="Acrobacia" type="number" value="0" aria-label="Bônus de Acrobacia" />
+    </div>
+
+    <div class="skill-row">
+      <button class="skill-roll" type="button" data-roll-skill="Adestramento">Adestramento</button>
+      <select class="skill-attribute" aria-label="Atributo de Adestramento">
+        <option value="agi">AGI</option>
+        <option value="for">FOR</option>
+        <option value="int">INT</option>
+        <option value="pre" selected>PRE</option>
+        <option value="vig">VIG</option>
+      </select>
+      <input data-skill="Adestramento" type="number" value="0" aria-label="Bônus de Adestramento" />
+    </div>
+
+    <div class="skill-row">
+      <button class="skill-roll" type="button" data-roll-skill="Artes">Artes</button>
+      <select class="skill-attribute" aria-label="Atributo de Artes">
+        <option value="agi">AGI</option>
+        <option value="for">FOR</option>
+        <option value="int">INT</option>
+        <option value="pre" selected>PRE</option>
+        <option value="vig">VIG</option>
+      </select>
+      <input data-skill="Artes" type="number" value="0" aria-label="Bônus de Artes" />
+    </div>
+
+    <div class="skill-row">
+      <button class="skill-roll" type="button" data-roll-skill="Atletismo">Atletismo</button>
+      <select class="skill-attribute" aria-label="Atributo de Atletismo">
+        <option value="agi">AGI</option>
+        <option value="for" selected>FOR</option>
+        <option value="int">INT</option>
+        <option value="pre">PRE</option>
+        <option value="vig">VIG</option>
+      </select>
+      <input data-skill="Atletismo" type="number" value="0" aria-label="Bônus de Atletismo" />
+    </div>
+
+    <div class="skill-row">
+      <button class="skill-roll" type="button" data-roll-skill="Atualidades">Atualidades</button>
+      <select class="skill-attribute" aria-label="Atributo de Atualidades">
+        <option value="agi">AGI</option>
+        <option value="for">FOR</option>
+        <option value="int" selected>INT</option>
+        <option value="pre">PRE</option>
+        <option value="vig">VIG</option>
+      </select>
+      <input data-skill="Atualidades" type="number" value="0" aria-label="Bônus de Atualidades" />
+    </div>
+
+    <div class="skill-row">
+      <button class="skill-roll" type="button" data-roll-skill="Ciências">Ciências</button>
+      <select class="skill-attribute" aria-label="Atributo de Ciências">
+        <option value="agi">AGI</option>
+        <option value="for">FOR</option>
+        <option value="int" selected>INT</option>
+        <option value="pre">PRE</option>
+        <option value="vig">VIG</option>
+      </select>
+      <input data-skill="Ciências" type="number" value="0" aria-label="Bônus de Ciências" />
+    </div>
+
+    <div class="skill-row">
+      <button class="skill-roll" type="button" data-roll-skill="Crime">Crime</button>
+      <select class="skill-attribute" aria-label="Atributo de Crime">
+        <option value="agi" selected>AGI</option>
+        <option value="for">FOR</option>
+        <option value="int">INT</option>
+        <option value="pre">PRE</option>
+        <option value="vig">VIG</option>
+      </select>
+      <input data-skill="Crime" type="number" value="0" aria-label="Bônus de Crime" />
+    </div>
+
+    <div class="skill-row">
+      <button class="skill-roll" type="button" data-roll-skill="Diplomacia">Diplomacia</button>
+      <select class="skill-attribute" aria-label="Atributo de Diplomacia">
+        <option value="agi">AGI</option>
+        <option value="for">FOR</option>
+        <option value="int">INT</option>
+        <option value="pre" selected>PRE</option>
+        <option value="vig">VIG</option>
+      </select>
+      <input data-skill="Diplomacia" type="number" value="0" aria-label="Bônus de Diplomacia" />
+    </div>
+
+    <div class="skill-row">
+      <button class="skill-roll" type="button" data-roll-skill="Enganação">Enganação</button>
+      <select class="skill-attribute" aria-label="Atributo de Enganação">
+        <option value="agi">AGI</option>
+        <option value="for">FOR</option>
+        <option value="int">INT</option>
+        <option value="pre" selected>PRE</option>
+        <option value="vig">VIG</option>
+      </select>
+      <input data-skill="Enganação" type="number" value="0" aria-label="Bônus de Enganação" />
+    </div>
+
+    <div class="skill-row">
+      <button class="skill-roll" type="button" data-roll-skill="Fortitude">Fortitude</button>
+      <select class="skill-attribute" aria-label="Atributo de Fortitude">
+        <option value="agi">AGI</option>
+        <option value="for">FOR</option>
+        <option value="int">INT</option>
+        <option value="pre">PRE</option>
+        <option value="vig" selected>VIG</option>
+      </select>
+      <input data-skill="Fortitude" type="number" value="0" aria-label="Bônus de Fortitude" />
+    </div>
+
+    <div class="skill-row">
+      <button class="skill-roll" type="button" data-roll-skill="Furtividade">Furtividade</button>
+      <select class="skill-attribute" aria-label="Atributo de Furtividade">
+        <option value="agi" selected>AGI</option>
+        <option value="for">FOR</option>
+        <option value="int">INT</option>
+        <option value="pre">PRE</option>
+        <option value="vig">VIG</option>
+      </select>
+      <input data-skill="Furtividade" type="number" value="0" aria-label="Bônus de Furtividade" />
+    </div>
+
+    <div class="skill-row">
+      <button class="skill-roll" type="button" data-roll-skill="Iniciativa">Iniciativa</button>
+      <select class="skill-attribute" aria-label="Atributo de Iniciativa">
+        <option value="agi" selected>AGI</option>
+        <option value="for">FOR</option>
+        <option value="int">INT</option>
+        <option value="pre">PRE</option>
+        <option value="vig">VIG</option>
+      </select>
+      <input data-skill="Iniciativa" type="number" value="0" aria-label="Bônus de Iniciativa" />
+    </div>
+
+    <div class="skill-row">
+      <button class="skill-roll" type="button" data-roll-skill="Intimidação">Intimidação</button>
+      <select class="skill-attribute" aria-label="Atributo de Intimidação">
+        <option value="agi">AGI</option>
+        <option value="for">FOR</option>
+        <option value="int">INT</option>
+        <option value="pre" selected>PRE</option>
+        <option value="vig">VIG</option>
+      </select>
+      <input data-skill="Intimidação" type="number" value="0" aria-label="Bônus de Intimidação" />
+    </div>
+
+    <div class="skill-row">
+      <button class="skill-roll" type="button" data-roll-skill="Intuição">Intuição</button>
+      <select class="skill-attribute" aria-label="Atributo de Intuição">
+        <option value="agi">AGI</option>
+        <option value="for">FOR</option>
+        <option value="int">INT</option>
+        <option value="pre" selected>PRE</option>
+        <option value="vig">VIG</option>
+      </select>
+      <input data-skill="Intuição" type="number" value="0" aria-label="Bônus de Intuição" />
+    </div>
+
+    <div class="skill-row">
+      <button class="skill-roll" type="button" data-roll-skill="Investigação">Investigação</button>
+      <select class="skill-attribute" aria-label="Atributo de Investigação">
+        <option value="agi">AGI</option>
+        <option value="for">FOR</option>
+        <option value="int" selected>INT</option>
+        <option value="pre">PRE</option>
+        <option value="vig">VIG</option>
+      </select>
+      <input data-skill="Investigação" type="number" value="0" aria-label="Bônus de Investigação" />
+    </div>
+
+    <div class="skill-row">
+      <button class="skill-roll" type="button" data-roll-skill="Luta">Luta</button>
+      <select class="skill-attribute" aria-label="Atributo de Luta">
+        <option value="agi">AGI</option>
+        <option value="for" selected>FOR</option>
+        <option value="int">INT</option>
+        <option value="pre">PRE</option>
+        <option value="vig">VIG</option>
+      </select>
+      <input data-skill="Luta" type="number" value="0" aria-label="Bônus de Luta" />
+    </div>
+
+    <div class="skill-row">
+      <button class="skill-roll" type="button" data-roll-skill="Medicina">Medicina</button>
+      <select class="skill-attribute" aria-label="Atributo de Medicina">
+        <option value="agi">AGI</option>
+        <option value="for">FOR</option>
+        <option value="int" selected>INT</option>
+        <option value="pre">PRE</option>
+        <option value="vig">VIG</option>
+      </select>
+      <input data-skill="Medicina" type="number" value="0" aria-label="Bônus de Medicina" />
+    </div>
+
+    <div class="skill-row">
+      <button class="skill-roll" type="button" data-roll-skill="Ocultismo">Ocultismo</button>
+      <select class="skill-attribute" aria-label="Atributo de Ocultismo">
+        <option value="agi">AGI</option>
+        <option value="for">FOR</option>
+        <option value="int" selected>INT</option>
+        <option value="pre">PRE</option>
+        <option value="vig">VIG</option>
+      </select>
+      <input data-skill="Ocultismo" type="number" value="0" aria-label="Bônus de Ocultismo" />
+    </div>
+
+    <div class="skill-row">
+      <button class="skill-roll" type="button" data-roll-skill="Percepção">Percepção</button>
+      <select class="skill-attribute" aria-label="Atributo de Percepção">
+        <option value="agi">AGI</option>
+        <option value="for">FOR</option>
+        <option value="int">INT</option>
+        <option value="pre" selected>PRE</option>
+        <option value="vig">VIG</option>
+      </select>
+      <input data-skill="Percepção" type="number" value="0" aria-label="Bônus de Percepção" />
+    </div>
+
+    <div class="skill-row">
+      <button class="skill-roll" type="button" data-roll-skill="Pilotagem">Pilotagem</button>
+      <select class="skill-attribute" aria-label="Atributo de Pilotagem">
+        <option value="agi" selected>AGI</option>
+        <option value="for">FOR</option>
+        <option value="int">INT</option>
+        <option value="pre">PRE</option>
+        <option value="vig">VIG</option>
+      </select>
+      <input data-skill="Pilotagem" type="number" value="0" aria-label="Bônus de Pilotagem" />
+    </div>
+
+    <div class="skill-row">
+      <button class="skill-roll" type="button" data-roll-skill="Pontaria">Pontaria</button>
+      <select class="skill-attribute" aria-label="Atributo de Pontaria">
+        <option value="agi" selected>AGI</option>
+        <option value="for">FOR</option>
+        <option value="int">INT</option>
+        <option value="pre">PRE</option>
+        <option value="vig">VIG</option>
+      </select>
+      <input data-skill="Pontaria" type="number" value="0" aria-label="Bônus de Pontaria" />
+    </div>
+
+    <div class="skill-row">
+      <button class="skill-roll" type="button" data-roll-skill="Profissão">Profissão</button>
+      <select class="skill-attribute" aria-label="Atributo de Profissão">
+        <option value="agi">AGI</option>
+        <option value="for">FOR</option>
+        <option value="int" selected>INT</option>
+        <option value="pre">PRE</option>
+        <option value="vig">VIG</option>
+      </select>
+      <input data-skill="Profissão" type="number" value="0" aria-label="Bônus de Profissão" />
+    </div>
+
+    <div class="skill-row">
+      <button class="skill-roll" type="button" data-roll-skill="Reflexos">Reflexos</button>
+      <select class="skill-attribute" aria-label="Atributo de Reflexos">
+        <option value="agi" selected>AGI</option>
+        <option value="for">FOR</option>
+        <option value="int">INT</option>
+        <option value="pre">PRE</option>
+        <option value="vig">VIG</option>
+      </select>
+      <input data-skill="Reflexos" type="number" value="0" aria-label="Bônus de Reflexos" />
+    </div>
+
+    <div class="skill-row">
+      <button class="skill-roll" type="button" data-roll-skill="Religião">Religião</button>
+      <select class="skill-attribute" aria-label="Atributo de Religião">
+        <option value="agi">AGI</option>
+        <option value="for">FOR</option>
+        <option value="int">INT</option>
+        <option value="pre" selected>PRE</option>
+        <option value="vig">VIG</option>
+      </select>
+      <input data-skill="Religião" type="number" value="0" aria-label="Bônus de Religião" />
+    </div>
+
+    <div class="skill-row">
+      <button class="skill-roll" type="button" data-roll-skill="Sobrevivência">Sobrevivência</button>
+      <select class="skill-attribute" aria-label="Atributo de Sobrevivência">
+        <option value="agi">AGI</option>
+        <option value="for">FOR</option>
+        <option value="int" selected>INT</option>
+        <option value="pre">PRE</option>
+        <option value="vig">VIG</option>
+      </select>
+      <input data-skill="Sobrevivência" type="number" value="0" aria-label="Bônus de Sobrevivência" />
+    </div>
+
+    <div class="skill-row">
+      <button class="skill-roll" type="button" data-roll-skill="Tática">Tática</button>
+      <select class="skill-attribute" aria-label="Atributo de Tática">
+        <option value="agi">AGI</option>
+        <option value="for">FOR</option>
+        <option value="int" selected>INT</option>
+        <option value="pre">PRE</option>
+        <option value="vig">VIG</option>
+      </select>
+      <input data-skill="Tática" type="number" value="0" aria-label="Bônus de Tática" />
+    </div>
+
+    <div class="skill-row">
+      <button class="skill-roll" type="button" data-roll-skill="Tecnologia">Tecnologia</button>
+      <select class="skill-attribute" aria-label="Atributo de Tecnologia">
+        <option value="agi">AGI</option>
+        <option value="for">FOR</option>
+        <option value="int" selected>INT</option>
+        <option value="pre">PRE</option>
+        <option value="vig">VIG</option>
+      </select>
+      <input data-skill="Tecnologia" type="number" value="0" aria-label="Bônus de Tecnologia" />
+    </div>
+
+    <div class="skill-row">
+      <button class="skill-roll" type="button" data-roll-skill="Vontade">Vontade</button>
+      <select class="skill-attribute" aria-label="Atributo de Vontade">
+        <option value="agi">AGI</option>
+        <option value="for">FOR</option>
+        <option value="int">INT</option>
+        <option value="pre" selected>PRE</option>
+        <option value="vig">VIG</option>
+      </select>
+      <input data-skill="Vontade" type="number" value="0" aria-label="Bônus de Vontade" />
+    </div>
+  </div>
+</section>
+
+<!-- COMBATE -->
+<section class="sheet-card combat-card">
+
+    <div class="section-title">
+        <h2>Combate</h2>
+    </div>
+
+    <!-- ABAS -->
+    <div class="combat-tabs" role="tablist" aria-label="Categorias de combate">
+
+        <button
+            class="combat-tab active"
+            type="button"
+            data-combat-tab="abilities"
+            role="tab"
+            aria-selected="true"
+        >
+            Habilidades
+        </button>
+
+        <button
+            class="combat-tab"
+            type="button"
+            data-combat-tab="rituals"
+            role="tab"
+            aria-selected="false"
+        >
+            Rituais
+        </button>
+
+        <button
+            class="combat-tab"
+            type="button"
+            data-combat-tab="weapons"
+            role="tab"
+            aria-selected="false"
+        >
+            Armas
+        </button>
+
+        <button
+            class="combat-tab"
+            type="button"
+            data-combat-tab="moves"
+            role="tab"
+            aria-selected="false"
+        >
+            Golpes
+        </button>
+
+    </div>
+
+
+    <!-- CONTEÚDO DAS ABAS -->
+    <div class="combat-panels">
+
+        <!-- HABILIDADES -->
+        <div
+            class="combat-panel active"
+            data-combat-panel="abilities"
+            role="tabpanel"
+        >
+            <div class="combat-empty">
+                <span>Habilidades</span>
+
+                <p>
+                    Nenhuma habilidade adicionada.
+                </p>
+
+                <button type="button" class="combat-add-button">
+                    + Adicionar habilidade
+                </button>
             </div>
-          </section>
+        </div>
+
+
+        <!-- RITUAIS -->
+        <div
+            class="combat-panel"
+            data-combat-panel="rituals"
+            role="tabpanel"
+            hidden
+        >
+            <div class="combat-empty">
+                <span>Rituais</span>
+
+                <p>
+                    Nenhum ritual adicionado.
+                </p>
+
+                <button type="button" class="combat-add-button">
+                    + Adicionar ritual
+                </button>
+            </div>
+        </div>
+
+
+        <!-- ARMAS -->
+        <div
+            class="combat-panel"
+            data-combat-panel="weapons"
+            role="tabpanel"
+            hidden
+        >
+            <div class="combat-empty">
+                <span>Armas</span>
+
+                <p>
+                    Nenhuma arma adicionada.
+                </p>
+
+                <button type="button" class="combat-add-button">
+                    + Adicionar arma
+                </button>
+            </div>
+        </div>
+
+
+        <!-- GOLPES -->
+        <div
+            class="combat-panel"
+            data-combat-panel="moves"
+            role="tabpanel"
+            hidden
+        >
+            <div class="combat-empty">
+                <span>Golpes</span>
+
+                <p>
+                    Nenhum golpe adicionado.
+                </p>
+
+                <button type="button" class="combat-add-button">
+                    + Adicionar golpe
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- Resultado das rolagens -->
+<div class="roll-result" id="roll-result" aria-live="polite" aria-hidden="true">
+  <div class="roll-result-header">
+    <span>Perícia rodada</span>
+    <strong id="roll-skill-name">Luta</strong>
+  </div>
+
+  <div class="roll-result-attribute">
+    <span>Atributo utilizado</span>
+    <strong id="roll-attribute">FORÇA · 3d20</strong>
+  </div>
+
+  <div class="roll-dice" id="roll-dice"></div>
+
+  <div class="roll-total">
+    <span>RESULTADO</span>
+    <strong id="roll-total">22</strong>
+  </div>
+  </div>
+  
         </div>
       </div>
     </main>
   <script src="../scripts/api.js"></script>
-  <script src="../scripts/character-sheet.js"></script>
+  <script src="../scripts/pages/character-sheet.js"></script>
   </body>
 </html>

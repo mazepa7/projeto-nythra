@@ -75,6 +75,24 @@ document.addEventListener(
 
 async function inicializarFicha() {
 
+    if (DEV_MODE) {
+    preencherFicha({
+        name: "Agente de teste",
+        system: "ordem_paranormal",
+        sheet_data: {}
+    });
+
+    updateCalculatedFields();
+
+    sheetLoaded = false;
+
+    alterarStatus("Modo de desenvolvimento");
+
+    bloquearCampos(false);
+
+    return;
+}
+
     if (!sheetId) {
 
         window.location.href =
@@ -893,3 +911,410 @@ function bloquearCampos(
     );
 
 }
+
+// ==============================
+// SISTEMA DE ROLAGENS
+// ==============================
+
+const attributeNames = {
+    agi: "AGILIDADE",
+    for: "FORÇA",
+    int: "INTELECTO",
+    pre: "PRESENÇA",
+    vig: "VIGOR"
+};
+
+
+let rollResultTimer = null;
+
+
+// ==============================
+// ROLAR D20
+// ==============================
+
+function rollD20() {
+
+    return Math.floor(
+        Math.random() * 20
+    ) + 1;
+
+}
+
+
+// ==============================
+// ROLAR PERÍCIA
+// ==============================
+
+function rollSkill(button) {
+
+    const row =
+        button.closest(
+            ".skill-row"
+        );
+
+
+    if (!row) {
+        return;
+    }
+
+
+    const skillName =
+        button.dataset.rollSkill;
+
+
+    const attributeSelect =
+        row.querySelector(
+            ".skill-attribute"
+        );
+
+
+    const skillInput =
+        row.querySelector(
+            "[data-skill]"
+        );
+
+
+    if (
+        !attributeSelect ||
+        !skillInput
+    ) {
+        return;
+    }
+
+
+    const attribute =
+        attributeSelect.value;
+
+
+    const attributeValue =
+        numberValue(
+            attribute
+        );
+
+
+    const skillBonus =
+        Math.max(
+            0,
+            Number(
+                skillInput.value
+            ) || 0
+        );
+
+
+    // Ordem Paranormal:
+    // valor do atributo = quantidade de d20
+
+    const diceAmount =
+        Math.max(
+            1,
+            attributeValue
+        );
+
+
+    const rolls = [];
+
+
+    for (
+        let i = 0;
+        i < diceAmount;
+        i++
+    ) {
+
+        rolls.push(
+            rollD20()
+        );
+
+    }
+
+
+    const bestRoll =
+        Math.max(
+            ...rolls
+        );
+
+
+    const total =
+        bestRoll +
+        skillBonus;
+
+
+    showRollResult({
+        skillName,
+        attribute,
+        attributeValue,
+        skillBonus,
+        rolls,
+        bestRoll,
+        total
+    });
+
+}
+
+
+// ==============================
+// MOSTRAR RESULTADO
+// ==============================
+
+function showRollResult({
+    skillName,
+    attribute,
+    attributeValue,
+    skillBonus,
+    rolls,
+    bestRoll,
+    total
+}) {
+
+    const result =
+        get(
+            "roll-result"
+        );
+
+
+    const skillNameElement =
+        get(
+            "roll-skill-name"
+        );
+
+
+    const attributeElement =
+        get(
+            "roll-attribute"
+        );
+
+
+    const diceElement =
+        get(
+            "roll-dice"
+        );
+
+
+    const totalElement =
+        get(
+            "roll-total"
+        );
+
+
+    if (
+        !result ||
+        !skillNameElement ||
+        !attributeElement ||
+        !diceElement ||
+        !totalElement
+    ) {
+        return;
+    }
+
+
+    skillNameElement.textContent =
+        skillName;
+
+
+    attributeElement.textContent =
+        `${attributeNames[attribute]} · ${attributeValue}d20 · +${skillBonus}`;
+
+
+    diceElement.innerHTML = "";
+
+
+    let bestAlreadyMarked = false;
+
+
+    rolls.forEach(
+        (roll) => {
+
+            const die =
+                document.createElement(
+                    "span"
+                );
+
+
+            die.className =
+                "roll-die";
+
+
+            die.textContent =
+                roll;
+
+
+            if (
+                roll === bestRoll &&
+                !bestAlreadyMarked
+            ) {
+
+                die.classList.add(
+                    "best"
+                );
+
+
+                bestAlreadyMarked =
+                    true;
+
+            }
+
+
+            diceElement.appendChild(
+                die
+            );
+
+        }
+    );
+
+
+    totalElement.textContent =
+        total;
+
+
+    result.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+
+    // Reinicia animação caso o jogador
+    // role várias perícias rapidamente.
+
+    result.classList.remove(
+        "show"
+    );
+
+
+    requestAnimationFrame(
+        () => {
+
+            result.classList.add(
+                "show"
+            );
+
+        }
+    );
+
+
+    clearTimeout(
+        rollResultTimer
+    );
+
+
+    rollResultTimer =
+        setTimeout(
+            hideRollResult,
+            5000
+        );
+
+}
+
+
+// ==============================
+// ESCONDER RESULTADO
+// ==============================
+
+function hideRollResult() {
+
+    const result =
+        get(
+            "roll-result"
+        );
+
+
+    if (!result) {
+        return;
+    }
+
+
+    result.classList.remove(
+        "show"
+    );
+
+
+    result.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+}
+
+
+// ==============================
+// EVENTOS DAS PERÍCIAS
+// ==============================
+
+document
+    .querySelectorAll(
+        "[data-roll-skill]"
+    )
+    .forEach(
+        (button) => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    rollSkill(
+                        button
+                    );
+
+                }
+            );
+
+        }
+    );
+
+    /* =========================
+   ABAS DE COMBATE
+========================= */
+
+const combatTabs =
+    document.querySelectorAll("[data-combat-tab]");
+
+const combatPanels =
+    document.querySelectorAll("[data-combat-panel]");
+
+
+function changeCombatTab(tabName) {
+
+    combatTabs.forEach((tab) => {
+
+        const isActive =
+            tab.dataset.combatTab === tabName;
+
+        tab.classList.toggle(
+            "active",
+            isActive
+        );
+
+        tab.setAttribute(
+            "aria-selected",
+            isActive
+        );
+
+    });
+
+
+    combatPanels.forEach((panel) => {
+
+        const isActive =
+            panel.dataset.combatPanel === tabName;
+
+        panel.classList.toggle(
+            "active",
+            isActive
+        );
+
+        panel.hidden = !isActive;
+
+    });
+
+}
+
+
+combatTabs.forEach((tab) => {
+
+    tab.addEventListener("click", () => {
+
+        changeCombatTab(
+            tab.dataset.combatTab
+        );
+
+    });
+
+});
