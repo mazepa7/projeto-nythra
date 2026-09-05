@@ -72,6 +72,7 @@ document.addEventListener(
     inicializarFicha
 );
 
+const DEV_MODE = false;
 
 async function inicializarFicha() {
 

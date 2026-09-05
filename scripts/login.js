@@ -40,7 +40,7 @@ loginForm.addEventListener("submit", async (event) => {
         console.log("Usuário logado:", resultado.usuario);
 
         setTimeout(() => {
-            window.location.href = "../index.html";
+            window.location.href = "../pages/sheets.html";
         }, 700);
 
     } catch (erro) {
