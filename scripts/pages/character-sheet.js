@@ -170,9 +170,7 @@ async function inicializarFicha() {
 
         preencherFicha(
             ficha
-        );
-
-
+            );
         updateCalculatedFields();
 
 
@@ -346,6 +344,954 @@ function preencherFicha(ficha) {
                 pericias[skill] ?? 0;
 
         });
+
+        renderizarHabilidades(
+    data.habilidades || []
+);
+
+renderizarRituais(
+    data.rituais || []
+);
+
+renderizarArmas(
+    data.armas || []
+);
+
+renderizarGolpes(
+    data.golpes || []
+);
+
+}
+       
+function selecionarItemDaFicha(item) {
+
+    document
+        .querySelectorAll(".is-selected")
+        .forEach((elemento) => {
+
+            elemento.classList.remove(
+                "is-selected"
+            );
+
+        });
+
+    item.classList.add("is-selected");
+
+}
+// ==============================
+// HABILIDADES
+// ==============================
+
+function criarCardDeHabilidade(
+    habilidade = {}
+) {
+
+    const card =
+        document.createElement("article");
+
+    card.className = "ability-card";
+
+    const header =
+        document.createElement("div");
+
+    header.className =
+        "ability-card-header";
+
+
+    const nome =
+        document.createElement("input");
+
+    nome.className = "ability-name";
+    nome.type = "text";
+    nome.placeholder = "Nome da habilidade";
+    nome.maxLength = 80;
+    nome.value = habilidade.nome || "";
+
+
+    const remover =
+        document.createElement("button");
+
+    remover.className =
+        "ability-remove-button";
+
+    remover.type = "button";
+    remover.textContent = "Remover";
+
+
+    const descricao =
+        document.createElement("textarea");
+
+    descricao.className =
+        "ability-description";
+
+    descricao.placeholder =
+        "Descreva o efeito, custo, duração ou observações da habilidade.";
+
+    descricao.rows = 3;
+    descricao.value = habilidade.descricao || "";
+
+
+    remover.addEventListener(
+        "click",
+        () => {
+
+            card.remove();
+
+            atualizarEstadoVazioDasHabilidades();
+
+            agendarSalvamento(100);
+
+        }
+    );
+
+    card.addEventListener(
+    "click",
+    () => {
+
+       selecionarItemDaFicha(card);
+
+    }
+);
+
+
+card.addEventListener(
+    "focusin",
+    () => {
+
+        selecionarItemDaFicha(card);
+
+    }
+);  
+
+document.addEventListener(
+    "click",
+    (event) => {
+
+        const clicouEmCard =
+    event.target.closest(
+        ".ability-card, .ritual-card, .weapon-card, .move-card"
+    );
+
+const clicouNoBotaoAdicionar =
+    event.target.closest(
+        "#add-ability, #add-ritual, #add-weapon, #add-move"
+    );  
+
+        if (
+            clicouEmCard ||
+            clicouNoBotaoAdicionar
+        ) {
+            return;
+        }
+
+        document
+            .querySelectorAll(
+                ".ability-card.selected, .ritual-card.selected"
+            )
+            .forEach((card) => {
+
+                card.classList.remove(
+                    "selected"
+                );
+
+            });
+
+    }
+);
+
+
+    header.append(nome, remover);
+
+    card.append(header, descricao);
+
+    return card;
+
+}
+
+
+function atualizarEstadoVazioDasHabilidades() {
+
+    const lista =
+        get("abilities-list");
+
+    const estadoVazio =
+        get("abilities-empty");
+
+    if (!lista || !estadoVazio) {
+        return;
+    }
+
+    estadoVazio.hidden =
+        lista.children.length > 0;
+
+}
+
+
+function renderizarHabilidades(
+    habilidades = []
+) {
+
+    const lista =
+        get("abilities-list");
+
+    if (!lista) {
+        return;
+    }
+
+    lista.innerHTML = "";
+
+    habilidades.forEach(
+        (habilidade) => {
+
+            lista.appendChild(
+                criarCardDeHabilidade(
+                    habilidade
+                )
+            );
+
+        }
+    );
+
+    atualizarEstadoVazioDasHabilidades();
+
+}
+
+
+function coletarHabilidades() {
+
+    return Array.from(
+        document.querySelectorAll(
+            ".ability-card"
+        )
+    )
+        .map((card) => ({
+
+            nome:
+                card
+                    .querySelector(
+                        ".ability-name"
+                    )
+                    .value
+                    .trim(),
+
+            descricao:
+                card
+                    .querySelector(
+                        ".ability-description"
+                    )
+                    .value
+                    .trim()
+
+        }))
+        .filter(
+            (habilidade) =>
+                habilidade.nome ||
+                habilidade.descricao
+        );
+
+}
+
+// ==============================
+// RITUAIS
+// ==============================
+
+function selecionarRitual(card) {
+
+   selecionarItemDaFicha(card);
+}
+
+
+function atualizarEstadoVazioDosRituais() {
+
+    const lista =
+        get("rituals-list");
+
+    const estadoVazio =
+        get("rituals-empty");
+
+    if (!lista || !estadoVazio) {
+        return;
+    }
+
+    estadoVazio.hidden =
+        lista.children.length > 0;
+
+}
+
+
+function criarCardDeRitual(
+    ritual = {}
+) {
+
+    const card =
+        document.createElement("article");
+
+    card.className = "ritual-card";
+
+
+    const header =
+        document.createElement("div");
+
+    header.className =
+        "ritual-card-header";
+
+
+    const nome =
+        document.createElement("input");
+
+    nome.className = "ritual-name";
+    nome.type = "text";
+    nome.placeholder = "Nome do ritual";
+    nome.maxLength = 80;
+    nome.value = ritual.nome || "";
+
+
+    const circulo =
+        document.createElement("select");
+
+    circulo.className = "ritual-select";
+
+    [
+        "1º círculo",
+        "2º círculo",
+        "3º círculo",
+        "4º círculo"
+    ].forEach((opcao) => {
+
+        const option =
+            document.createElement("option");
+
+        option.value = opcao;
+        option.textContent = opcao;
+
+        circulo.appendChild(option);
+
+    });
+
+    circulo.value =
+        ritual.circulo || "1º círculo";
+
+
+    const elemento =
+        document.createElement("select");
+
+    elemento.className = "ritual-select";
+
+    [
+        "Sangue",
+        "Morte",
+        "Conhecimento",
+        "Energia",
+        "Medo"
+    ].forEach((opcao) => {
+
+        const option =
+            document.createElement("option");
+
+        option.value = opcao;
+        option.textContent = opcao;
+
+        elemento.appendChild(option);
+
+    });
+
+    elemento.value =
+        ritual.elemento || "Sangue";
+
+    card.dataset.element =
+        elemento.value;
+
+
+    const remover =
+        document.createElement("button");
+
+    remover.className =
+        "ritual-remove-button";
+
+    remover.type = "button";
+    remover.textContent = "Remover";
+
+
+    const descricao =
+        document.createElement("textarea");
+
+    descricao.className =
+        "ritual-description";
+
+    descricao.placeholder =
+        "Descreva o efeito, custo, execução e alcance do ritual.";
+
+    descricao.rows = 3;
+    descricao.value = ritual.descricao || "";
+
+
+    card.addEventListener(
+        "click",
+        () => {
+
+            selecionarRitual(card);
+
+        }
+    );
+
+
+    card.addEventListener(
+        "focusin",
+        () => {
+
+            selecionarRitual(card);
+
+        }
+    );
+
+
+    elemento.addEventListener(
+        "change",
+        () => {
+
+            card.dataset.element =
+                elemento.value;
+
+        }
+    );
+
+
+    remover.addEventListener(
+        "click",
+        () => {
+
+            card.remove();
+
+            atualizarEstadoVazioDosRituais();
+
+            agendarSalvamento(100);
+
+        }
+    );
+
+
+    header.append(
+        nome,
+        circulo,
+        elemento,
+        remover
+    );
+
+    card.append(
+        header,
+        descricao
+    );
+
+    return card;
+
+}
+
+
+function renderizarRituais(
+    rituais = []
+) {
+
+    const lista =
+        get("rituals-list");
+
+    if (!lista) {
+        return;
+    }
+
+    lista.innerHTML = "";
+
+    rituais.forEach((ritual) => {
+
+        lista.appendChild(
+            criarCardDeRitual(ritual)
+        );
+
+    });
+
+    atualizarEstadoVazioDosRituais();
+
+}
+
+
+function coletarRituais() {
+
+    return Array.from(
+        document.querySelectorAll(
+            ".ritual-card"
+        )
+    )
+        .map((card) => ({
+
+            nome:
+                card
+                    .querySelector(".ritual-name")
+                    .value
+                    .trim(),
+
+            circulo:
+                card
+                    .querySelectorAll(".ritual-select")[0]
+                    .value,
+
+            elemento:
+                card
+                    .querySelectorAll(".ritual-select")[1]
+                    .value,
+
+            descricao:
+                card
+                    .querySelector(
+                        ".ritual-description"
+                    )
+                    .value
+                    .trim()
+
+        }))
+        .filter(
+            (ritual) =>
+                ritual.nome ||
+                ritual.descricao
+        );
+
+}
+
+
+// ==============================
+// ARMAS
+// ==============================
+
+function atualizarEstadoVazioDasArmas() {
+
+    const lista =
+        get("weapons-list");
+
+    const estadoVazio =
+        get("weapons-empty");
+
+    if (!lista || !estadoVazio) {
+        return;
+    }
+
+    estadoVazio.hidden =
+        lista.children.length > 0;
+
+}
+
+
+function criarCardDeArma(
+    arma = {}
+) {
+
+    const card =
+        document.createElement("article");
+
+    card.className = "weapon-card";
+
+
+    const header =
+        document.createElement("div");
+
+    header.className =
+        "weapon-card-header";
+
+
+    const nome =
+        document.createElement("input");
+
+    nome.className = "weapon-name";
+    nome.type = "text";
+    nome.placeholder = "Nome da arma";
+    nome.maxLength = 80;
+    nome.value = arma.nome || "";
+
+
+    const dano =
+        document.createElement("input");
+
+    dano.className = "weapon-input";
+    dano.type = "text";
+    dano.placeholder = "Dano";
+    dano.value = arma.dano || "";
+
+
+    const critico =
+        document.createElement("input");
+
+    critico.className = "weapon-input";
+    critico.type = "text";
+    critico.placeholder = "Crítico";
+    critico.value = arma.critico || "";
+
+
+    const alcance =
+        document.createElement("input");
+
+    alcance.className = "weapon-input";
+    alcance.type = "text";
+    alcance.placeholder = "Alcance";
+    alcance.value = arma.alcance || "";
+
+
+    const remover =
+        document.createElement("button");
+
+    remover.className =
+        "weapon-remove-button";
+
+    remover.type = "button";
+    remover.textContent = "Remover";
+
+
+    const descricao =
+        document.createElement("textarea");
+
+    descricao.className =
+        "weapon-description";
+
+    descricao.placeholder =
+        "Categoria, tipo, modificações e observações da arma.";
+
+    descricao.rows = 3;
+    descricao.value = arma.descricao || "";
+
+
+    card.addEventListener(
+        "click",
+        () => {
+
+            selecionarItemDaFicha(card);
+
+        }
+    );
+
+
+    card.addEventListener(
+        "focusin",
+        () => {
+
+            selecionarItemDaFicha(card);
+
+        }
+    );
+
+
+    remover.addEventListener(
+        "click",
+        () => {
+
+            card.remove();
+
+            atualizarEstadoVazioDasArmas();
+
+            agendarSalvamento(100);
+
+        }
+    );
+
+
+    header.append(
+        nome,
+        dano,
+        critico,
+        alcance,
+        remover
+    );
+
+    card.append(
+        header,
+        descricao
+    );
+
+    return card;
+
+}
+
+
+function renderizarArmas(
+    armas = []
+) {
+
+    const lista =
+        get("weapons-list");
+
+    if (!lista) {
+        return;
+    }
+
+    lista.innerHTML = "";
+
+    armas.forEach((arma) => {
+
+        lista.appendChild(
+            criarCardDeArma(arma)
+        );
+
+    });
+
+    atualizarEstadoVazioDasArmas();
+
+}
+
+
+function coletarArmas() {
+
+    return Array.from(
+        document.querySelectorAll(
+            ".weapon-card"
+        )
+    )
+        .map((card) => ({
+
+            nome:
+                card
+                    .querySelector(".weapon-name")
+                    .value
+                    .trim(),
+
+            dano:
+                card
+                    .querySelectorAll(".weapon-input")[0]
+                    .value
+                    .trim(),
+
+            critico:
+                card
+                    .querySelectorAll(".weapon-input")[1]
+                    .value
+                    .trim(),
+
+            alcance:
+                card
+                    .querySelectorAll(".weapon-input")[2]
+                    .value
+                    .trim(),
+
+            descricao:
+                card
+                    .querySelector(
+                        ".weapon-description"
+                    )
+                    .value
+                    .trim()
+
+        }))
+        .filter(
+            (arma) =>
+                arma.nome ||
+                arma.dano ||
+                arma.descricao
+        );
+
+}
+
+// ==============================
+// GOLPES
+// ==============================
+
+function atualizarEstadoVazioDosGolpes() {
+
+    const lista =
+        get("moves-list");
+
+    const estadoVazio =
+        get("moves-empty");
+
+    if (!lista || !estadoVazio) {
+        return;
+    }
+
+    estadoVazio.hidden =
+        lista.children.length > 0;
+
+}
+
+
+function criarCardDeGolpe(
+    golpe = {}
+) {
+
+    const card =
+        document.createElement("article");
+
+    card.className = "move-card";
+
+
+    const header =
+        document.createElement("div");
+
+    header.className =
+        "move-card-header";
+
+
+    const nome =
+        document.createElement("input");
+
+    nome.className = "move-name";
+    nome.type = "text";
+    nome.placeholder = "Nome do golpe";
+    nome.maxLength = 80;
+    nome.value = golpe.nome || "";
+
+
+    const tipo =
+        document.createElement("select");
+
+    tipo.className = "move-type";
+
+    [
+        "Ataque especial",
+        "Manobra",
+        "Reação",
+        "Ação tática"
+    ].forEach((opcao) => {
+
+        const option =
+            document.createElement("option");
+
+        option.value = opcao;
+        option.textContent = opcao;
+
+        tipo.appendChild(option);
+
+    });
+
+    tipo.value =
+        golpe.tipo || "Ataque especial";
+
+
+    const remover =
+        document.createElement("button");
+
+    remover.className =
+        "move-remove-button";
+
+    remover.type = "button";
+    remover.textContent = "Remover";
+
+
+    const descricao =
+        document.createElement("textarea");
+
+    descricao.className =
+        "move-description";
+
+    descricao.placeholder =
+        "Descreva o efeito, custo e condições para usar este golpe.";
+
+    descricao.rows = 3;
+    descricao.value = golpe.descricao || "";
+
+
+    card.addEventListener(
+        "click",
+        () => {
+
+            selecionarItemDaFicha(card);
+
+        }
+    );
+
+
+    card.addEventListener(
+        "focusin",
+        () => {
+
+            selecionarItemDaFicha(card);
+
+        }
+    );
+
+
+    remover.addEventListener(
+        "click",
+        () => {
+
+            card.remove();
+
+            atualizarEstadoVazioDosGolpes();
+
+            agendarSalvamento(100);
+
+        }
+    );
+
+
+    header.append(
+        nome,
+        tipo,
+        remover
+    );
+
+    card.append(
+        header,
+        descricao
+    );
+
+    return card;
+
+}
+
+
+function renderizarGolpes(
+    golpes = []
+) {
+
+    const lista =
+        get("moves-list");
+
+    if (!lista) {
+        return;
+    }
+
+    lista.innerHTML = "";
+
+    golpes.forEach((golpe) => {
+
+        lista.appendChild(
+            criarCardDeGolpe(golpe)
+        );
+
+    });
+
+    atualizarEstadoVazioDosGolpes();
+
+}
+
+
+function coletarGolpes() {
+
+    return Array.from(
+        document.querySelectorAll(
+            ".move-card"
+        )
+    )
+        .map((card) => ({
+
+            nome:
+                card
+                    .querySelector(".move-name")
+                    .value
+                    .trim(),
+
+            tipo:
+                card
+                    .querySelector(".move-type")
+                    .value,
+
+            descricao:
+                card
+                    .querySelector(
+                        ".move-description"
+                    )
+                    .value
+                    .trim()
+
+        }))
+        .filter(
+            (golpe) =>
+                golpe.nome ||
+                golpe.descricao
+        );
 
 }
 
@@ -700,10 +1646,19 @@ function coletarDadosDaFicha() {
 
         },
 
-        pericias
+        pericias,
 
-    };
+habilidades:
+    coletarHabilidades(),
 
+rituais:
+    coletarRituais(),
+
+armas:
+    coletarArmas(),
+
+golpes:
+    coletarGolpes()};
 }
 
 
@@ -1319,3 +2274,155 @@ combatTabs.forEach((tab) => {
     });
 
 });
+
+get("add-ability").addEventListener(
+    "click",
+    () => {
+
+        const lista =
+            get("abilities-list");
+
+        const card =
+            criarCardDeHabilidade();
+
+        lista.appendChild(card);
+
+        atualizarEstadoVazioDasHabilidades();
+
+        card
+            .querySelector(".ability-name")
+            .focus();
+
+        agendarSalvamento(100);
+
+    }
+);
+
+
+get("abilities-list").addEventListener(
+    "input",
+    () => {
+
+        agendarSalvamento(650);
+
+    }
+);
+
+get("add-ritual").addEventListener(
+    "click",
+    () => {
+
+        const lista =
+            get("rituals-list");
+
+        const card =
+            criarCardDeRitual();
+
+        lista.appendChild(card);
+
+        atualizarEstadoVazioDosRituais();
+
+        card
+            .querySelector(".ritual-name")
+            .focus();
+
+        agendarSalvamento(100);
+
+    }
+);
+
+
+get("rituals-list").addEventListener(
+    "input",
+    () => {
+
+        agendarSalvamento(650);
+
+    }
+);
+
+
+get("rituals-list").addEventListener(
+    "change",
+    () => {
+
+        agendarSalvamento(100);
+
+    }
+);
+
+get("add-weapon").addEventListener(
+    "click",
+    () => {
+
+        const lista =
+            get("weapons-list");
+
+        const card =
+            criarCardDeArma();
+
+        lista.appendChild(card);
+
+        atualizarEstadoVazioDasArmas();
+
+        card
+            .querySelector(".weapon-name")
+            .focus();
+
+        agendarSalvamento(100);
+
+    }
+);
+
+
+get("weapons-list").addEventListener(
+    "input",
+    () => {
+
+        agendarSalvamento(650);
+
+    }
+);
+
+get("add-move").addEventListener(
+    "click",
+    () => {
+
+        const lista =
+            get("moves-list");
+
+        const card =
+            criarCardDeGolpe();
+
+        lista.appendChild(card);
+
+        atualizarEstadoVazioDosGolpes();
+
+        card
+            .querySelector(".move-name")
+            .focus();
+
+        agendarSalvamento(100);
+
+    }
+);
+
+
+get("moves-list").addEventListener(
+    "input",
+    () => {
+
+        agendarSalvamento(650);
+
+    }
+);
+
+
+get("moves-list").addEventListener(
+    "change",
+    () => {
+
+        agendarSalvamento(100);
+
+    }
+);

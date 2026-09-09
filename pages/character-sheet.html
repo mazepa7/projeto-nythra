@@ -28,10 +28,24 @@
           <label id="agent-name-label" class="sr-only" for="agent-name">Nome do personagem</label>
           <input id="agent-name" class="agent-name-input" type="text" value="Novo agente" maxlength="50" />
           <div class="agent-details">
-            <label>Jogador <input id="player-name" type="text" value="" placeholder="Seu nome" /></label>
-            <label>Origem <input id="origin" type="text" value="" placeholder="Não definida" /></label>
-          </div>
-        </div>
+  <label>Jogador
+    <input id="player-name" type="text" value="" placeholder="Seu nome" />
+  </label>
+
+  <label>Origem
+    <input id="origin" type="text" value="" placeholder="Não definida" />
+  </label>
+
+  <label>Trilha
+    <input
+      id="trail"
+      data-field="trail"
+      type="text"
+      placeholder="Defina ao atingir NEX 10%"
+    />
+  </label>
+</div>
+        </div>+-
         <div class="agent-selects">
           <label for="character-class">Classe
             <select id="character-class">
@@ -92,7 +106,6 @@
           <section class="sheet-card details-card" aria-labelledby="details-title">
             <div class="section-heading"><p class="eyebrow">Personagem</p><h2 id="details-title">Detalhes da ficha</h2></div>
             <div class="details-grid">
-              <label>Trilha <input id="trail" data-field="trail" type="text" placeholder="Defina ao atingir NEX 10%" /></label>
               <label>Patente <input id="rank" data-field="rank" type="text" value="Recruta" /></label>
               <label class="wide-field">Descrição <textarea id="description" data-field="description" rows="5" placeholder="Aparência, personalidade, história e outras anotações do agente."></textarea></label>
             </div>
@@ -507,86 +520,97 @@
     <div class="combat-panels">
 
         <!-- HABILIDADES -->
-        <div
-            class="combat-panel active"
-            data-combat-panel="abilities"
-            role="tabpanel"
-        >
-            <div class="combat-empty">
-                <span>Habilidades</span>
+        <div>
+  <class="combat-panel active"
+  data-combat-panel="abilities"
+  role="tabpanel">
+  <div id="abilities-list" class="abilities-list"></div>
 
-                <p>
-                    Nenhuma habilidade adicionada.
-                </p>
+  <div id="abilities-empty" class="combat-empty">
+    <span>Habilidades</span>
+    <p>Nenhuma habilidade adicionada.</p>
+  </div>
 
-                <button type="button" class="combat-add-button">
-                    + Adicionar habilidade
-                </button>
-            </div>
-        </div>
+  <button
+    id="add-ability"
+    type="button"
+    class="combat-add-button"
+  >
+    + Adicionar habilidade
+  </button>
+</div>
 
 
         <!-- RITUAIS -->
         <div
-            class="combat-panel"
-            data-combat-panel="rituals"
-            role="tabpanel"
-            hidden
-        >
-            <div class="combat-empty">
-                <span>Rituais</span>
+  class="combat-panel"
+  data-combat-panel="rituals"
+  role="tabpanel"
+  hidden
+>
+  <div id="rituals-list" class="rituals-list"></div>
 
-                <p>
-                    Nenhum ritual adicionado.
-                </p>
+  <div id="rituals-empty" class="combat-empty">
+    <span>Rituais</span>
+    <p>Nenhum ritual adicionado.</p>
+  </div>
 
-                <button type="button" class="combat-add-button">
-                    + Adicionar ritual
-                </button>
-            </div>
-        </div>
+  <button
+    id="add-ritual"
+    type="button"
+    class="combat-add-button"
+  >
+    + Adicionar ritual
+  </button>
+</div>
 
 
         <!-- ARMAS -->
         <div
-            class="combat-panel"
-            data-combat-panel="weapons"
-            role="tabpanel"
-            hidden
-        >
-            <div class="combat-empty">
-                <span>Armas</span>
+  class="combat-panel"
+  data-combat-panel="weapons"
+  role="tabpanel"
+  hidden
+>  <div id="weapons-list" class="weapons-list"></div>
 
-                <p>
-                    Nenhuma arma adicionada.
-                </p>
+  <div id="weapons-empty" class="combat-empty">
+    <span>Armas</span>
+    <p>Nenhuma arma adicionada.</p>
+  </div>
 
-                <button type="button" class="combat-add-button">
-                    + Adicionar arma
-                </button>
-            </div>
-        </div>
+  <button
+    id="add-weapon"
+    type="button"
+    class="combat-add-button"
+  >
+    + Adicionar arma
+  </button>
+</div>
+
 
 
         <!-- GOLPES -->
         <div
-            class="combat-panel"
-            data-combat-panel="moves"
-            role="tabpanel"
-            hidden
-        >
-            <div class="combat-empty">
-                <span>Golpes</span>
+  class="combat-panel"
+  data-combat-panel="moves"
+  role="tabpanel"
+  hidden
+>
+  <div id="moves-list" class="moves-list"></div>
 
-                <p>
-                    Nenhum golpe adicionado.
-                </p>
+  <div id="moves-empty" class="combat-empty">
+    <span>Golpes</span>
+    <p>Nenhum golpe adicionado.</p>
+  </div>
 
-                <button type="button" class="combat-add-button">
-                    + Adicionar golpe
-                </button>
-            </div>
-        </div>
+  <button
+    id="add-move"
+    type="button"
+    class="combat-add-button"
+  >
+    + Adicionar golpe
+  </button>
+</div>
 
     </div>
 

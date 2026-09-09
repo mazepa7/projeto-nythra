@@ -154,24 +154,39 @@ a {
   color: var(--primary-hover);
 }
 .agent-details {
-  display: flex;
-  gap: 18px;
-  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
 }
+
 .agent-details label {
+  display: grid;
+  gap: 6px;
   color: var(--text-secondary);
-  font-size: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
+
 .agent-details input {
-  width: 140px;
-  margin-left: 6px;
-  padding: 0 0 3px;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0 0 7px;
   border: 0;
   border-bottom: 1px solid var(--border);
   outline: 0;
   background: transparent;
+  color: var(--text);
+  font-family: inherit;
   font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
 }
+
 .agent-details input:focus {
   border-color: var(--primary);
 }
@@ -697,6 +712,25 @@ a {
         bottom: 20px;
     }
 
+    .agent-header {
+  align-items: flex-start;
+  padding: 22px;
+}
+
+.agent-mark {
+  flex-basis: 52px;
+  width: 52px;
+  height: 52px;
+}
+
+.agent-details {
+  grid-template-columns: 1fr;
+}
+
+.agent-selects {
+  width: 100%;
+  grid-template-columns: repeat(2, 1fr);
+}
 }
 
 /* =========================
@@ -877,6 +911,422 @@ a {
 }
 
 /* Remove as setas dos inputs numéricos */
+
+.abilities-list {
+  display: grid;
+  gap: 12px;
+}
+
+.ability-card {
+  position: relative;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: rgba(8, 8, 18, 0.34);
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.ability-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ability-name {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 0;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  outline: 0;
+  background: transparent;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.ability-name:focus,
+.ability-description:focus {
+  border-color: var(--primary);
+}
+
+.ability-description {
+  width: 100%;
+  min-height: 74px;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  outline: 0;
+  resize: vertical;
+  background: rgba(8, 8, 18, 0.5);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.ability-remove-button {
+  display: none;
+  flex: 0 0 auto;
+  padding: 7px 10px;
+  border: 1px solid rgba(255, 90, 110, 0.35);
+  border-radius: 7px;
+  background: rgba(255, 90, 110, 0.08);
+  color: #ff8795;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.is-selected {
+  border-color: rgba(139, 92, 246, 0.85) !important;
+  background: rgba(139, 92, 246, 0.06);
+  box-shadow:
+    0 0 0 1px rgba(139, 92, 246, 0.22),
+    0 0 22px rgba(139, 92, 246, 0.2);
+}
+
+.is-selected .ability-remove-button,
+.is-selected .ritual-remove-button {
+  display: block;
+}
+.rituals-list {
+  display: grid;
+  gap: 12px;
+}
+
+.ritual-card {
+  position: relative;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: rgba(8, 8, 18, 0.34);
+  transition:
+  border-color 0.2s ease,
+  background 0.2s ease,
+  box-shadow 0.2s ease;
+}
+
+.ritual-card-header {
+  display: grid;
+  grid-template-columns: 1fr 110px 145px auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.ritual-name,
+.ritual-select {
+  width: 100%;
+  min-width: 0;
+  padding: 8px 0;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  outline: 0;
+  background: transparent;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.ritual-name {
+  font-weight: 700;
+}
+
+.ritual-select {
+  cursor: pointer;
+}
+
+.ritual-name:focus,
+.ritual-select:focus,
+.ritual-description:focus {
+  border-color: var(--primary);
+}
+
+.ritual-description {
+  width: 100%;
+  min-height: 74px;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  outline: 0;
+  resize: vertical;
+  background: rgba(8, 8, 18, 0.5);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.ritual-remove-button {
+  display: none;
+  padding: 7px 10px;
+  border: 1px solid rgba(255, 90, 110, 0.35);
+  border-radius: 7px;
+  background: rgba(255, 90, 110, 0.08);
+  color: #ff8795;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ritual-remove-button:hover {
+  border-color: #ff5a6e;
+  background: rgba(255, 90, 110, 0.15);
+}
+
+.ritual-card[data-element="Sangue"] .ritual-select:last-of-type {
+  border-color: #ff5a6e;
+}
+
+.ritual-card[data-element="Morte"] .ritual-select:last-of-type {
+  border-color: #050505;
+}
+
+.ritual-card[data-element="Conhecimento"] .ritual-select:last-of-type {
+  border-color: #ffc857;
+}
+
+.ritual-card[data-element="Energia"] .ritual-select:last-of-type {
+  border-color: #914cff;
+}
+
+.ritual-card[data-element="Medo"] .ritual-select:last-of-type {
+  border-color: #d8dee9;
+}
+
+.ritual-select,
+.move-type {
+  color-scheme: dark;
+}
+
+.ritual-select option,
+.move-type option {
+  background: #13101f;
+  color: #f5f7fa;
+}
+
+.ritual-select option:checked,
+.move-type option:checked {
+  background: #6e7bff;
+  color: #ffffff;
+}
+
+.weapons-list {
+  display: grid;
+  gap: 12px;
+}
+
+.weapon-card {
+  position: relative;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: rgba(8, 8, 18, 0.34);
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.weapon-card-header {
+  display: grid;
+  grid-template-columns: 1fr 110px 100px 120px auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.weapon-name,
+.weapon-input,
+.weapon-description {
+  color: var(--text);
+  font-family: inherit;
+}
+
+.weapon-name,
+.weapon-input {
+  width: 100%;
+  min-width: 0;
+  padding: 8px 0;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  outline: 0;
+  background: transparent;
+  font-size: 13px;
+}
+
+.weapon-name {
+  font-weight: 700;
+}
+
+.weapon-input:focus,
+.weapon-name:focus,
+.weapon-description:focus {
+  border-color: var(--primary);
+}
+
+.weapon-description {
+  width: 100%;
+  min-height: 70px;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  outline: 0;
+  resize: vertical;
+  background: rgba(8, 8, 18, 0.5);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.weapon-remove-button {
+  display: none;
+  padding: 7px 10px;
+  border: 1px solid rgba(255, 90, 110, 0.35);
+  border-radius: 7px;
+  background: rgba(255, 90, 110, 0.08);
+  color: #ff8795;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.weapon-remove-button:hover {
+  border-color: #ff5a6e;
+  background: rgba(255, 90, 110, 0.15);
+}
+
+.is-selected .weapon-remove-button {
+  display: block;
+}
+
+@media (max-width: 650px) {
+  .weapon-card-header {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .weapon-name {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 650px) {
+  .ritual-card-header {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .ritual-name {
+    grid-column: span 2;
+  }
+}
+
+.moves-list {
+  display: grid;
+  gap: 12px;
+}
+
+.move-card {
+  position: relative;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: rgba(8, 8, 18, 0.34);
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.move-card-header {
+  display: grid;
+  grid-template-columns: 1fr 145px auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.move-name,
+.move-type {
+  width: 100%;
+  min-width: 0;
+  padding: 8px 0;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  outline: 0;
+  background: transparent;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.move-name {
+  font-weight: 700;
+}
+
+.move-type {
+  cursor: pointer;
+}
+
+.move-name:focus,
+.move-type:focus,
+.move-description:focus {
+  border-color: var(--primary);
+}
+
+.move-description {
+  width: 100%;
+  min-height: 70px;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  outline: 0;
+  resize: vertical;
+  background: rgba(8, 8, 18, 0.5);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.move-remove-button {
+  display: none;
+  padding: 7px 10px;
+  border: 1px solid rgba(255, 90, 110, 0.35);
+  border-radius: 7px;
+  background: rgba(255, 90, 110, 0.08);
+  color: #ff8795;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.move-remove-button:hover {
+  border-color: #ff5a6e;
+  background: rgba(255, 90, 110, 0.15);
+}
+
+.is-selected .move-remove-button {
+  display: block;
+}
+
+@media (max-width: 650px) {
+  .move-card-header {
+    grid-template-columns: 1fr auto;
+  }
+
+  .move-name {
+    grid-column: span 2;
+  }
+}
 
 /* Chrome, Edge, Safari e Opera */
 input[type="number"]::-webkit-inner-spin-button,
