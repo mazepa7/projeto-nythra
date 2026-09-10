@@ -1311,6 +1311,58 @@ function getAdvancements(nex) {
 
 }
 
+// ==============================
+// MODO DA FICHA
+// ==============================
+
+let sheetMode = "edit";
+
+function atualizarModoDaFicha() {
+  const modeButton = get("sheet-mode-toggle");
+  const isPlayMode = sheetMode === "play";
+
+  document.body.dataset.sheetMode = sheetMode;
+
+
+  modeButton.dataset.mode = isPlayMode ? "play" : "edit";
+  modeButton.setAttribute("aria-pressed", String(isPlayMode));
+
+  modeButton.querySelector(".sheet-mode-toggle-label").textContent =
+    isPlayMode
+      ? "Modo: Jogar"
+      : "Modo: Edição";
+}
+
+function alternarModoDaFicha() {
+  sheetMode = sheetMode === "edit"
+    ? "play"
+    : "edit";
+
+  atualizarModoDaFicha();
+
+  const modeButton = get("sheet-mode-toggle");
+
+  modeButton.classList.remove("mode-changed");
+  void modeButton.offsetWidth;
+  modeButton.classList.add("mode-changed");
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  get("sheet-mode-toggle").addEventListener(
+    "click",
+    alternarModoDaFicha
+  );
+
+  atualizarModoDaFicha();
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.altKey && event.key.toLowerCase() === "e") {
+    event.preventDefault();
+    alternarModoDaFicha();
+  }
+});
+
 
 function numberValue(id) {
 
