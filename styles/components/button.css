@@ -1,35 +1,74 @@
-/* Botões  */
-.btn{
+/* =========================
+   BUTTON BASE
+========================= */
 
-    height:48px;
+.btn {
+    display: inline-flex;
 
-    padding:0 24px;
+    align-items: center;
+    justify-content: center;
 
-    border-radius:12px;
+    padding: 14px 24px;
 
-    transition:.2s;
+    border: 1px solid var(--border);
+    border-radius: 12px;
 
-    font-weight:600;
+    background: rgba(255, 255, 255, 0.06);
 
+    color: var(--text);
+
+    font-family: var(--font);
+    font-size: 15px;
+    font-weight: 600;
+
+    line-height: 1;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    box-shadow: none;
+
+    transition:
+        transform .2s ease,
+        background .2s ease,
+        border-color .2s ease,
+        color .2s ease,
+        box-shadow .25s ease;
 }
 
-.btn-primary{
 
-    background:var(--primary);
+/* =========================
+   ESTADO NORMAL
+========================= */
 
-    color:white;
+.btn-primary,
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.06);
 
+    border-color: var(--border);
+
+    color: var(--text);
+
+    box-shadow: none;
 }
-.btn-primary:hover{
 
-    background:var(--primary-hover);
 
-    transform:translateY(-2px);
+/* =========================
+   HOVER
+========================= */
 
-}
+.btn-primary:hover,
+.btn-secondary:hover {
+    background: var(--primary);
 
-.btn-secondary{
+    border-color: var(--primary);
 
-    border:1px solid var(--border);
+    color: #fff;
 
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 0 18px rgba(110, 123, 255, 0.35),
+        0 8px 30px rgba(110, 123, 255, 0.20);
 }

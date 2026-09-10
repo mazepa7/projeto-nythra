@@ -24,23 +24,45 @@ async function verificarLogin() {
         }
 
 
-        // Usuário já está logado
-        authLink.textContent =
-            "Minhas fichas";
+        /*
+        =========================
+        LINK DE AUTENTICAÇÃO
+        =========================
+        */
+
+        if (authLink) {
+
+            authLink.textContent =
+                "Minhas fichas";
+
+            /*
+            Verifica se estamos dentro da pasta /pages/
+            */
+
+            const estaEmPages =
+                window.location.pathname.includes("/pages/");
 
 
-        authLink.href =
-            "pages/sheets.html";
+            authLink.href =
+                estaEmPages
+                    ? "sheets.html"
+                    : "pages/sheets.html";
+
+        }
 
 
         /*
-        Enquanto ainda não existe a área de Mestre,
-        mantemos esse botão levando às fichas.
-        Depois podemos trocar por campaigns.html.
+        =========================
+        BOTÃO MESTRE
+        =========================
         */
 
-        masterButton.href =
-            "pages/sheets.html";
+        if (masterButton) {
+
+            masterButton.href =
+                "pages/sheets.html";
+
+        }
 
 
     } catch (erro) {

@@ -1,25 +1,191 @@
+/* =========================
+   NYTHRA — CARDS
+========================= */
 
-/* Card */
 
-.card{
+/* ---------- CARD BASE ---------- */
 
-    background:var(--card);
+.card {
+    background: var(--card);
 
-    border:1px solid var(--border);
+    border: 1px solid var(--border);
+    border-radius: 16px;
 
-    border-radius:16px;
+    padding: 24px;
 
-    padding:24px;
-
-    transition:.2s;
-
+    transition: .25s;
 }
 
-/* Hover */
-
-.card:hover{
-
-    transform:translateY(-4px);
-
+.card:hover {
+    transform: translateY(-4px);
 }
 
+
+/* ---------- ROLE CARD ---------- */
+
+.role-card {
+    position: relative;
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    min-height: 430px;
+
+    padding: 32px;
+
+    border-radius: 24px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, .08),
+            rgba(255, 255, 255, .03)
+        );
+
+    border: 1px solid rgba(255, 255, 255, .12);
+
+    backdrop-filter: blur(20px);
+
+    transition: .3s;
+}
+
+
+/* Brilho interno */
+
+.role-card::before {
+    content: "";
+
+    position: absolute;
+
+    width: 220px;
+    height: 220px;
+
+    top: -120px;
+    right: -120px;
+
+    border-radius: 50%;
+
+    background: var(--primary);
+
+    filter: blur(100px);
+
+    opacity: .12;
+
+    pointer-events: none;
+}
+
+
+.role-card:hover {
+    transform: translateY(-7px);
+
+    border-color: rgba(139, 92, 246, .45);
+
+    box-shadow:
+        0 20px 60px rgba(139, 92, 246, .12);
+}
+
+
+/* ---------- CARD HEADER ---------- */
+
+.card-header {
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
+    margin-bottom: 22px;
+}
+
+
+.card-header h2 {
+    font-size: 28px;
+
+    margin-bottom: 5px;
+}
+
+
+.card-header span {
+    color: var(--text-secondary);
+
+    font-size: 14px;
+}
+
+
+/* ---------- CARD ICON ---------- */
+
+.card-icon {
+    width: 60px;
+    height: 60px;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    flex-shrink: 0;
+
+    border-radius: 17px;
+
+    background: rgba(139, 92, 246, .15);
+
+    border: 1px solid rgba(139, 92, 246, .35);
+
+    font-size: 27px;
+}
+
+
+/* ---------- DESCRIPTION ---------- */
+
+.role-card > p {
+    color: var(--text-secondary);
+
+    line-height: 1.6;
+
+    margin-bottom: 24px;
+}
+
+
+/* ---------- FEATURES ---------- */
+
+.card-features {
+    list-style: none;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 13px;
+
+    margin-bottom: 28px;
+}
+
+
+.card-features li {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    color: var(--text-secondary);
+}
+
+
+.card-features li::before {
+    content: "✓";
+
+    color: var(--primary);
+
+    font-weight: 700;
+}
+
+
+/* ---------- BUTTON ---------- */
+
+.role-card .btn {
+    width: 100%;
+
+    margin-top: auto;
+}

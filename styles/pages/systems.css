@@ -1,0 +1,341 @@
+/* =========================
+   NYTHRA — SYSTEMS
+========================= */
+
+
+/* =========================
+   PAGE
+========================= */
+
+.systems-page {
+    width: min(760px, calc(100% - 40px));
+
+    min-height: calc(100vh - 160px);
+
+    margin: 0 auto;
+
+    padding: 70px 0 90px;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.systems-header {
+    margin-bottom: 32px;
+}
+
+
+.systems-header h1 {
+    margin: 0;
+
+    color: var(--text);
+
+    font-size: clamp(32px, 4vw, 42px);
+    font-weight: 700;
+
+    letter-spacing: -1.5px;
+}
+
+
+.systems-header p {
+    margin: 10px 0 0;
+
+    color: var(--text-secondary);
+
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+
+/* =========================
+   SYSTEM LIST
+========================= */
+
+.systems-list {
+    display: flex;
+    flex-direction: column;
+
+    gap: 12px;
+}
+
+
+/* =========================
+   SYSTEM ITEM
+========================= */
+
+.system-item {
+    position: relative;
+
+    display: grid;
+
+    grid-template-columns: 54px 1fr auto;
+
+    align-items: center;
+
+    gap: 18px;
+
+    width: 100%;
+
+    padding: 16px 18px;
+
+    background: rgba(255, 255, 255, 0.025);
+
+    border: 1px solid var(--border);
+    border-radius: 16px;
+
+    color: var(--text);
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition:
+        background .2s ease,
+        border-color .2s ease,
+        box-shadow .25s ease,
+        transform .2s ease;
+}
+
+
+.system-item:hover {
+    background:
+        rgba(110, 123, 255, 0.06);
+
+    border-color:
+        rgba(110, 123, 255, 0.55);
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 0 20px rgba(110, 123, 255, 0.08),
+        0 8px 30px rgba(0, 0, 0, 0.18);
+}
+
+
+/* =========================
+   ICON
+========================= */
+
+.system-icon {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 54px;
+    height: 54px;
+
+    overflow: hidden;
+
+    background:
+        rgba(110, 123, 255, 0.08);
+
+    border:
+        1px solid rgba(110, 123, 255, 0.25);
+
+    border-radius: 14px;
+
+    color: var(--text);
+
+    font-size: 14px;
+    font-weight: 700;
+
+    transition:
+        background .2s ease,
+        border-color .2s ease,
+        box-shadow .25s ease,
+        transform .2s ease;
+}
+
+
+.system-item:hover .system-icon {
+    background:
+        rgba(110, 123, 255, 0.14);
+
+    border-color:
+        rgba(110, 123, 255, 0.55);
+
+    box-shadow:
+        0 0 16px rgba(110, 123, 255, 0.15);
+}
+
+
+/* Para quando trocarmos OP/JJ por imagens */
+
+.system-icon img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+}
+
+
+/* =========================
+   INFO
+========================= */
+
+.system-info {
+    min-width: 0;
+}
+
+
+.system-info h2 {
+    margin: 0;
+
+    color: var(--text);
+
+    font-size: 17px;
+    font-weight: 600;
+
+    letter-spacing: -0.3px;
+}
+
+
+.system-info p {
+    margin: 5px 0 0;
+
+    color: var(--text-secondary);
+
+    font-size: 13px;
+    font-weight: 400;
+
+    line-height: 1.4;
+}
+
+
+/* =========================
+   ARROW
+========================= */
+
+.system-arrow {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 32px;
+    height: 32px;
+
+    color: var(--text-secondary);
+
+    font-size: 28px;
+    font-weight: 300;
+
+    transition:
+        color .2s ease,
+        transform .2s ease,
+        text-shadow .2s ease;
+}
+
+
+.system-item:hover .system-arrow {
+    color: var(--primary);
+
+    transform:
+        translateX(4px);
+
+    text-shadow:
+        0 0 12px rgba(110, 123, 255, 0.4);
+}
+
+
+/* =========================
+   KEYBOARD FOCUS
+========================= */
+
+.system-item:focus-visible {
+    outline:
+        2px solid var(--primary);
+
+    outline-offset: 3px;
+}
+
+
+/* =========================
+   NAVBAR ACTIVE
+========================= */
+
+.navbar nav a.active {
+    color: var(--text);
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+    padding: 24px;
+
+    color: var(--text-secondary);
+
+    font-size: 13px;
+
+    text-align: center;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 600px) {
+
+    .systems-page {
+        width:
+            min(100% - 32px, 760px);
+
+        padding:
+            50px 0 70px;
+    }
+
+
+    .systems-header {
+        margin-bottom: 26px;
+    }
+
+
+    .systems-header h1 {
+        font-size: 32px;
+    }
+
+
+    .system-item {
+        grid-template-columns:
+            48px 1fr auto;
+
+        gap: 14px;
+
+        padding: 14px;
+    }
+
+
+    .system-icon {
+        width: 48px;
+        height: 48px;
+
+        border-radius: 12px;
+    }
+
+
+    .system-info h2 {
+        font-size: 16px;
+    }
+
+
+    .system-info p {
+        font-size: 12px;
+    }
+
+
+    .system-arrow {
+        width: 24px;
+
+        font-size: 24px;
+    }
+}
