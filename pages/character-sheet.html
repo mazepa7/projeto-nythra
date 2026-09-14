@@ -56,7 +56,7 @@
     />
   </label>
 </div>
-        </div>+-
+        </div>
         <div class="agent-selects">
           <label for="character-class">Classe
             <select id="character-class">
@@ -78,11 +78,11 @@
           <section class="sheet-card attributes-card" aria-labelledby="attributes-title">
             <div class="section-heading"><p class="eyebrow">Base</p><h2 id="attributes-title">Atributos</h2></div>
             <div class="attributes-list">
-              <label class="attribute"><span><b>AGI</b> Agilidade</span><input id="agi" data-field="agi" type="number" min="0" max="5" value="1" /></label>
-              <label class="attribute"><span><b>FOR</b> Força</span><input id="for" data-field="for" type="number" min="0" max="5" value="1" /></label>
-              <label class="attribute"><span><b>INT</b> Intelecto</span><input id="int" data-field="int" type="number" min="0" max="5" value="1" /></label>
-              <label class="attribute"><span><b>PRE</b> Presença</span><input id="pre" data-field="pre" type="number" min="0" max="5" value="1" /></label>
-              <label class="attribute"><span><b>VIG</b> Vigor</span><input id="vig" data-field="vig" type="number" min="0" max="5" value="1" /></label>
+              <label class="attribute" data-roll-attribute="agi"><span><b>AGI</b> Agilidade</span><input id="agi" data-field="agi" type="number" min="0" max="5" value="1" /></label>
+<label class="attribute" data-roll-attribute="for"><span><b>FOR</b> Força</span><input id="for" data-field="for" type="number" min="0" max="5" value="1" /></label>
+<label class="attribute" data-roll-attribute="int"><span><b>INT</b> Intelecto</span><input id="int" data-field="int" type="number" min="0" max="5" value="1" /></label>
+<label class="attribute" data-roll-attribute="pre"><span><b>PRE</b> Presença</span><input id="pre" data-field="pre" type="number" min="0" max="5" value="1" /></label>
+<label class="attribute" data-roll-attribute="vig"><span><b>VIG</b> Vigor</span><input id="vig" data-field="vig" type="number" min="0" max="5" value="1" /></label>
             </div>
           </section>
 
@@ -114,25 +114,146 @@
             </article>
           </section>
 
-          <section class="sheet-card details-card" aria-labelledby="details-title">
-            <div class="section-heading"><p class="eyebrow">Personagem</p><h2 id="details-title">Detalhes da ficha</h2></div>
-            <div class="details-grid">
-              <label>Patente <input id="rank" data-field="rank" type="text" value="Recruta" /></label>
-              <label class="wide-field">Descrição <textarea id="description" data-field="description" rows="5" placeholder="Aparência, personalidade, história e outras anotações do agente."></textarea></label>
-            </div>
-          </section>
+<section class="sheet-card details-card" aria-labelledby="details-title">
+  <div class="details-card-header">
+    <div class="section-heading">
+      <p class="eyebrow">Ficha</p>
+      <h2 id="details-title">Detalhes da ficha</h2>
+    </div>
 
-          <section class="sheet-card skills-card" aria-labelledby="skills-title">
-  <div class="section-heading">
-    <p class="eyebrow">Perícias</p>
-    <h2 id="skills-title">Testes de perícia</h2>
-    <p>
-      Clique em uma perícia para realizar o teste. Altere o atributo
-      quando o mestre solicitar uma combinação diferente.
-    </p>
+    <button
+      id="details-collapse-button"
+      class="details-collapse-button"
+      type="button"
+      aria-expanded="true"
+      aria-controls="details-content"
+      title="Minimizar detalhes da ficha"
+    >
+      −
+    </button>
   </div>
 
-  <div class="skills-grid">
+  <div id="details-content">
+    <div
+      class="combat-tabs"
+      role="tablist"
+      aria-label="Detalhes da ficha"
+    >
+      <button
+        class="combat-tab details-tab active"
+        type="button"
+        data-details-tab="character"
+        role="tab"
+        aria-selected="true"
+      >
+        Personagem
+      </button>
+
+      <button
+        class="combat-tab details-tab"
+        type="button"
+        data-details-tab="inventory"
+        role="tab"
+        aria-selected="false"
+      >
+        Inventário
+      </button>
+    </div>
+
+    <div class="combat-panels">
+      <div
+        class="combat-panel details-panel active"
+        data-details-panel="character"
+        role="tabpanel"
+      >
+        <div class="details-grid">
+          <label class="wide-field">
+            Aparência
+            <textarea
+              id="appearance"
+              rows="3"
+              placeholder="Como seu personagem aparenta ser?"
+            ></textarea>
+          </label>
+
+          <label class="wide-field">
+            Personalidade
+            <textarea
+              id="personality"
+              rows="3"
+              placeholder="Traços, comportamentos e jeito de agir."
+            ></textarea>
+          </label>
+
+          <label class="wide-field">
+            Objetivo
+            <textarea
+              id="objective"
+              rows="3"
+              placeholder="O que move seu personagem?"
+            ></textarea>
+          </label>
+
+          <label class="wide-field">
+            Histórico
+            <textarea
+              id="history"
+              rows="5"
+              placeholder="A história do personagem até aqui."
+            ></textarea>
+          </label>
+
+          <label class="wide-field">
+            Anotações
+            <textarea
+              id="notes"
+              rows="5"
+              placeholder="Informações importantes para a campanha."
+            ></textarea>
+          </label>
+        </div>
+      </div>
+
+      <div
+        class="combat-panel details-panel"
+        data-details-panel="inventory"
+        role="tabpanel"
+        hidden
+      >
+        <div class="combat-empty">
+          <span>Inventário</span>
+          <p>Em breve, seus itens e equipamentos aparecerão aqui.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+          <section class="sheet-card skills-card" aria-labelledby="skills-title">
+  <div class="details-card-header">
+    <div class="section-heading">
+      <p class="eyebrow">Perícias</p>
+      <h2 id="skills-title">Testes de perícia</h2>
+      <p>
+        Clique em uma perícia para realizar o teste. Altere o atributo
+        quando o mestre solicitar uma combinação diferente.
+      </p>
+    </div>
+
+    <button
+      id="skills-collapse-button"
+      class="details-collapse-button"
+      type="button"
+      aria-expanded="true"
+      aria-controls="skills-content"
+      title="Minimizar perícias"
+    >
+      −
+    </button>
+  </div>
+
+  <div id="skills-content">
+    <div class="skills-grid">
 
     <div class="skill-row">
       <button class="skill-roll" type="button" data-roll-skill="Acrobacia">
@@ -472,7 +593,9 @@
       <input data-skill="Vontade" type="number" value="0" aria-label="Bônus de Vontade" />
     </div>
   </div>
+  </div>
 </section>
+
 
 <!-- COMBATE -->
 <section class="sheet-card combat-card">

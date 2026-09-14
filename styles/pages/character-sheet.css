@@ -1389,3 +1389,64 @@ input[type="number"] {
     }
 
 }
+
+.attribute[data-roll-attribute] {
+  cursor: pointer;
+}
+
+body[data-sheet-mode="play"] .attribute[data-roll-attribute] input {
+  pointer-events: none;
+}
+
+body[data-sheet-mode="play"] .attribute[data-roll-attribute]:hover {
+  border-color: var(--primary);
+  background: rgba(139, 92, 246, 0.12);
+}
+
+.details-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.details-collapse-button {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-secondary);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.details-collapse-button:hover,
+.details-collapse-button:focus-visible {
+  border-color: var(--primary);
+  background: rgba(139, 92, 246, 0.14);
+  color: var(--primary-hover);
+  outline: none;
+}
+
+#details-content[hidden] {
+  display: none;
+}
+  
+body[data-sheet-mode="play"] .combat-add-button,
+body[data-sheet-mode="play"] .ability-remove-button,
+body[data-sheet-mode="play"] .ritual-remove-button,
+body[data-sheet-mode="play"] .weapon-remove-button,
+body[data-sheet-mode="play"] .move-remove-button {
+  display: none !important;
+}
+
+#skills-content[hidden] {
+  display: none;
+}

@@ -198,7 +198,10 @@ async function inicializarFicha() {
 
     } finally {
 
-        bloquearCampos(false);
+    bloquearCampos(false);
+    atualizarModoDaFicha();
+
+
 
     }
 
@@ -298,13 +301,20 @@ function preencherFicha(ficha) {
         data.trilha || "";
 
 
-    get("rank").value =
-        data.patente || "Recruta";
+    get("appearance").value =
+    data.aparencia || "";
 
+get("personality").value =
+    data.personalidade || "";
 
-    get("description").value =
-        data.descricao || "";
+get("objective").value =
+    data.objetivo || "";
 
+get("history").value =
+    data.historico || "";
+
+get("notes").value =
+    data.anotacoes || data.descricao || "";
 
     // ==============================
     // RECURSOS
@@ -1318,49 +1328,70 @@ function getAdvancements(nex) {
 let sheetMode = "edit";
 
 function atualizarModoDaFicha() {
-  const modeButton = get("sheet-mode-toggle");
-  const isPlayMode = sheetMode === "play";
+    const modeButton = get("sheet-mode-toggle");
+    const isPlayMode = sheetMode === "play";
 
-  document.body.dataset.sheetMode = sheetMode;
+    document.body.dataset.sheetMode = sheetMode;
 
+    modeButton.dataset.mode = isPlayMode ? "play" : "edit";
+    modeButton.setAttribute("aria-pressed", String(isPlayMode));
 
-  modeButton.dataset.mode = isPlayMode ? "play" : "edit";
-  modeButton.setAttribute("aria-pressed", String(isPlayMode));
+    modeButton.querySelector(".sheet-mode-toggle-label").textContent =
+        isPlayMode
+            ? "Modo: Jogar"
+            : "Modo: Edição";
 
-  modeButton.querySelector(".sheet-mode-toggle-label").textContent =
-    isPlayMode
-      ? "Modo: Jogar"
-      : "Modo: Edição";
+    document
+    .querySelectorAll(
+        "input:not(#current-pv):not(#current-pe):not(#current-san), select, textarea"
+    )
+    .forEach((field) => {
+        field.disabled = isPlayMode;
+    });
+
+    document
+        .querySelectorAll(
+            "#add-ability, #add-ritual, #add-weapon, #add-move, .ability-remove-button, .ritual-remove-button, .weapon-remove-button, .move-remove-button"
+        )
+        .forEach((button) => {
+            button.disabled = isPlayMode;
+        });
 }
 
 function alternarModoDaFicha() {
-  sheetMode = sheetMode === "edit"
-    ? "play"
-    : "edit";
+    sheetMode = sheetMode === "edit"
+        ? "play"
+        : "edit";
 
-  atualizarModoDaFicha();
+    atualizarModoDaFicha();
 
-  const modeButton = get("sheet-mode-toggle");
+    const modeButton = get("sheet-mode-toggle");
 
-  modeButton.classList.remove("mode-changed");
-  void modeButton.offsetWidth;
-  modeButton.classList.add("mode-changed");
+    modeButton.classList.remove("mode-changed");
+    void modeButton.offsetWidth;
+    modeButton.classList.add("mode-changed");
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  get("sheet-mode-toggle").addEventListener(
-    "click",
-    alternarModoDaFicha
-  );
+    get("sheet-mode-toggle").addEventListener(
+        "click",
+        alternarModoDaFicha
+    );
 
-  atualizarModoDaFicha();
+    atualizarModoDaFicha();
 });
 
 document.addEventListener("keydown", (event) => {
-  if (event.altKey && event.key.toLowerCase() === "e") {
-    event.preventDefault();
-    alternarModoDaFicha();
-  }
+    const activeTag = document.activeElement.tagName;
+
+    if (["INPUT", "TEXTAREA", "SELECT"].includes(activeTag)) {
+        return;
+    }
+
+    if (event.altKey && event.key.toLowerCase() === "e") {
+        event.preventDefault();
+        alternarModoDaFicha();
+    }
 });
 
 
@@ -1628,15 +1659,20 @@ function coletarDadosDaFicha() {
                 "trail"
             ).value.trim(),
 
-        patente:
-            get(
-                "rank"
-            ).value.trim(),
+        aparencia:
+    get("appearance").value,
 
-        descricao:
-            get(
-                "description"
-            ).value,
+personalidade:
+    get("personality").value,
+
+objetivo:
+    get("objective").value,
+
+historico:
+    get("history").value,
+
+anotacoes:
+    get("notes").value,
 
         atributos: {
 
@@ -1905,19 +1941,12 @@ function alterarStatus(texto) {
 // BLOQUEAR CAMPOS
 // ==============================
 
-function bloquearCampos(
-    bloquear
-) {
-
-    fields.forEach(
-        (field) => {
-
-            field.disabled =
-                bloquear;
-
-        }
-    );
-
+function bloquearCampos(bloquear) {
+    document
+        .querySelectorAll("input, select, textarea")
+        .forEach((field) => {
+            field.disabled = bloquear;
+        });
 }
 
 // ==============================
@@ -2058,6 +2087,36 @@ function rollSkill(button) {
 
 }
 
+function rollAttribute(attribute) {
+    const attributeValue = numberValue(attribute);
+
+    const diceAmount = Math.max(
+        1,
+        attributeValue
+    );
+
+    const rolls = [];
+
+    for (let i = 0; i < diceAmount; i++) {
+        rolls.push(
+            rollD20()
+        );
+    }
+
+    const bestRoll = Math.max(
+        ...rolls
+    );
+
+    showRollResult({
+        skillName: `Teste de ${attributeNames[attribute]}`,
+        attribute,
+        attributeValue,
+        skillBonus: 0,
+        rolls,
+        bestRoll,
+        total: bestRoll
+    });
+}
 
 // ==============================
 // MOSTRAR RESULTADO
@@ -2266,6 +2325,136 @@ document
 
         }
     );
+
+    document
+    .querySelectorAll("[data-roll-attribute]")
+    .forEach((card) => {
+        card.addEventListener("click", () => {
+            if (sheetMode !== "play") {
+                return;
+            }
+
+            rollAttribute(
+                card.dataset.rollAttribute
+            );
+        });
+    });
+
+
+    // ==============================
+// ABAS DOS DETALHES
+// ==============================
+
+const detailsTabs =
+    document.querySelectorAll("[data-details-tab]");
+
+const detailsPanels =
+    document.querySelectorAll("[data-details-panel]");
+
+function changeDetailsTab(tabName) {
+    detailsTabs.forEach((tab) => {
+        const isActive =
+            tab.dataset.detailsTab === tabName;
+
+        tab.classList.toggle(
+            "active",
+            isActive
+        );
+
+        tab.setAttribute(
+            "aria-selected",
+            String(isActive)
+        );
+    });
+
+    detailsPanels.forEach((panel) => {
+        const isActive =
+            panel.dataset.detailsPanel === tabName;
+
+        panel.classList.toggle(
+            "active",
+            isActive
+        );
+
+        panel.hidden = !isActive;
+    });
+}
+
+detailsTabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+        changeDetailsTab(
+            tab.dataset.detailsTab
+        );
+    });
+});
+
+// ==============================
+// MINIMIZAR DETALHES DA FICHA
+// ==============================
+
+const detailsCollapseButton =
+    get("details-collapse-button");
+
+const detailsContent =
+    get("details-content");
+
+function toggleDetailsCard() {
+    const isCollapsed =
+        detailsContent.hidden;
+
+    detailsContent.hidden =
+        !isCollapsed;
+
+    detailsCollapseButton.setAttribute(
+        "aria-expanded",
+        String(isCollapsed)
+    );
+
+    detailsCollapseButton.textContent =
+        isCollapsed ? "−" : "+";
+
+    detailsCollapseButton.title =
+        isCollapsed
+            ? "Minimizar detalhes da ficha"
+            : "Expandir detalhes da ficha";
+}
+
+detailsCollapseButton.addEventListener(
+    "click",
+    toggleDetailsCard
+);
+
+const skillsCollapseButton =
+    get("skills-collapse-button");
+
+const skillsContent =
+    get("skills-content");
+
+function toggleSkillsCard() {
+    const isCollapsed =
+        skillsContent.hidden;
+
+    skillsContent.hidden =
+        !isCollapsed;
+
+    skillsCollapseButton.setAttribute(
+        "aria-expanded",
+        String(isCollapsed)
+    );
+
+    skillsCollapseButton.textContent =
+        isCollapsed ? "−" : "+";
+
+    skillsCollapseButton.title =
+        isCollapsed
+            ? "Minimizar perícias"
+            : "Expandir perícias";
+}
+
+skillsCollapseButton.addEventListener(
+    "click",
+    toggleSkillsCard
+);
 
     /* =========================
    ABAS DE COMBATE
@@ -2478,3 +2667,4 @@ get("moves-list").addEventListener(
 
     }
 );
+
