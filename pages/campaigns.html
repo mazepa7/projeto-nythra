@@ -2,10 +2,12 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0"
     />
+
     <meta
       name="description"
       content="Campanhas de RPG criadas no Nythra."
@@ -14,7 +16,13 @@
     <title>Campanhas | Nythra</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+    />
+
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
@@ -38,7 +46,11 @@
     </header>
 
     <main class="campaigns-page container">
-      <section class="campaigns-hero" aria-labelledby="campaigns-title">
+      <!-- APRESENTAÇÃO -->
+      <section
+        class="campaigns-hero"
+        aria-labelledby="campaigns-title"
+      >
         <div>
           <p class="eyebrow">Área do Mestre</p>
 
@@ -60,23 +72,33 @@
         </button>
       </section>
 
+      <!-- CAMPANHAS CRIADAS -->
       <section
         class="campaigns-section"
         aria-labelledby="campaigns-list-title"
       >
         <div class="section-heading">
           <p class="eyebrow">Campanhas</p>
+
           <h2 id="campaigns-list-title">
-            Aventura em andamento
+            Aventuras em andamento
           </h2>
         </div>
 
         <div id="campaigns-list" class="campaigns-list">
+          <!--
+            Os cards das campanhas serão adicionados
+            aqui pelo campaigns.js.
+          -->
+
           <article
             id="campaigns-empty"
             class="campaigns-empty"
           >
-            <div class="campaigns-empty-icon" aria-hidden="true">
+            <div
+              class="campaigns-empty-icon"
+              aria-hidden="true"
+            >
               ✦
             </div>
 
@@ -98,12 +120,14 @@
         </div>
       </section>
 
+      <!-- PRÉVIA DO ESCUDO DO MESTRE -->
       <section
         class="master-tools"
         aria-labelledby="master-tools-title"
       >
         <div class="section-heading">
           <p class="eyebrow">Em breve</p>
+
           <h2 id="master-tools-title">
             Seu escudo de mestre
           </h2>
@@ -111,21 +135,51 @@
 
         <div class="master-tools-grid">
           <article class="master-tool-card">
-            <span aria-hidden="true">♟</span>
-            <h3>Jogadores</h3>
-            <p>Veja as fichas e recursos do grupo rapidamente.</p>
+            <span
+              class="master-tool-icon"
+              aria-hidden="true"
+            >
+              ♙
+            </span>
+
+            <div>
+              <h3>Jogadores</h3>
+              <p>
+                Fichas e recursos do grupo.
+              </p>
+            </div>
           </article>
 
           <article class="master-tool-card">
-            <span aria-hidden="true">⚔</span>
-            <h3>Combates</h3>
-            <p>Organize iniciativa, inimigos e encontros.</p>
+            <span
+              class="master-tool-icon"
+              aria-hidden="true"
+            >
+              ⚔
+            </span>
+
+            <div>
+              <h3>Combates</h3>
+              <p>
+                Iniciativa, inimigos e encontros.
+              </p>
+            </div>
           </article>
 
           <article class="master-tool-card">
-            <span aria-hidden="true">◈</span>
-            <h3>Mapas e notas</h3>
-            <p>Centralize locais, pistas e informações da sessão.</p>
+            <span
+              class="master-tool-icon"
+              aria-hidden="true"
+            >
+              ⌖
+            </span>
+
+            <div>
+              <h3>Mapas e notas</h3>
+              <p>
+                Locais, pistas e informações importantes.
+              </p>
+            </div>
           </article>
         </div>
       </section>
