@@ -30,6 +30,44 @@ const notesCount =
   document.querySelector("#notes-count");
 
 /* ========================================
+   MAPAS E NOTAS DA CAMPANHA
+======================================== */
+
+const mapsCount = document.querySelector("#maps-count");
+const mapsEmptyState = document.querySelector("#maps-empty-state");
+const mapsGrid = document.querySelector("#maps-grid");
+const addMapButton = document.querySelector("#add-map-button");
+const emptyAddMapButton = document.querySelector("#empty-add-map-button");
+const mapModal = document.querySelector("#map-modal");
+const closeMapModalButton = document.querySelector("#close-map-modal");
+const cancelMapButton = document.querySelector("#cancel-map-button");
+const mapForm = document.querySelector("#map-form");
+const mapNameInput = document.querySelector("#map-name");
+const mapImageInput = document.querySelector("#map-image");
+const mapDescriptionInput = document.querySelector("#map-description");
+const mapViewerModal = document.querySelector("#map-viewer-modal");
+const closeMapViewerButton = document.querySelector("#close-map-viewer");
+const mapViewerTitle = document.querySelector("#map-viewer-title");
+const mapViewerImage = document.querySelector("#map-viewer-image");
+const mapViewerDescription = document.querySelector("#map-viewer-description");
+
+const notesEmptyState = document.querySelector("#notes-empty-state");
+const notesGrid = document.querySelector("#notes-grid");
+const createNoteButton = document.querySelector("#create-note-button");
+const emptyCreateNoteButton = document.querySelector("#empty-create-note-button");
+const noteModal = document.querySelector("#note-modal");
+const noteModalTitle = document.querySelector("#note-modal-title");
+const closeNoteModalButton = document.querySelector("#close-note-modal");
+const cancelNoteButton = document.querySelector("#cancel-note-button");
+const noteForm = document.querySelector("#note-form");
+const noteTitleInput = document.querySelector("#note-title");
+const noteCategoryInput = document.querySelector("#note-category");
+const noteContentInput = document.querySelector("#note-content");
+const noteSubmitButton = noteForm.querySelector(
+  'button[type="submit"]'
+);
+
+/* ========================================
    JOGADORES
 ======================================== */
 
@@ -183,6 +221,8 @@ const participantMaxHealthInput =
 
 let saveTimer = null;
 
+let editingNoteId = null;
+
 let campaigns = loadCampaigns();
 
 let campaign = campaigns.find((item) => {
@@ -310,7 +350,10 @@ function unlockPageScroll() {
   const hasOpenModal =
     !linkPlayerModal.hidden ||
     !createCombatModal.hidden ||
-    !participantModal.hidden;
+    !participantModal.hidden ||
+    !mapModal.hidden ||
+    !mapViewerModal.hidden ||
+    !noteModal.hidden;
 
   if (!hasOpenModal) {
     document.body.style.overflow = "";
@@ -322,12 +365,16 @@ function unlockPageScroll() {
 ======================================== */
 
 function updateNotesCount() {
-  const hasNotes =
-    quickNotes.value.trim().length > 0;
+  const quickNotesAmount =
+    quickNotes.value.trim().length > 0 ? 1 : 0;
 
-  notesCount.textContent = hasNotes
-    ? "1"
-    : "0";
+  const permanentNotesAmount =
+    Array.isArray(campaign?.notes)
+      ? campaign.notes.length
+      : 0;
+
+  notesCount.textContent =
+    quickNotesAmount + permanentNotesAmount;
 }
 
 function saveQuickNotes() {
@@ -353,6 +400,305 @@ function scheduleNotesSave() {
     saveQuickNotes,
     600
   );
+}
+
+/* ========================================
+   MAPAS
+======================================== */
+
+function openMapModal() {
+  mapModal.hidden = false;
+  lockPageScroll();
+
+  window.requestAnimationFrame(() => {
+    mapNameInput.focus();
+  });
+}
+
+function closeMapModal() {
+  mapModal.hidden = true;
+  mapForm.reset();
+  unlockPageScroll();
+}
+
+function openMapViewer(map) {
+  mapViewerTitle.textContent = map.name;
+  mapViewerImage.src = map.image;
+  mapViewerImage.alt = `Mapa ${map.name}`;
+  mapViewerDescription.textContent =
+    map.description || "Sem descrição.";
+  mapViewerModal.hidden = false;
+  lockPageScroll();
+}
+
+function closeMapViewer() {
+  mapViewerModal.hidden = true;
+  mapViewerImage.src = "";
+  mapViewerImage.alt = "";
+  unlockPageScroll();
+}
+
+function readImageFile(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.addEventListener("load", () => {
+      resolve(reader.result);
+    });
+
+    reader.addEventListener("error", reject);
+    reader.readAsDataURL(file);
+  });
+}
+
+function createMapCard(map) {
+  const card = createElement("article", "map-card");
+  const image = createElement("img", "map-card-image");
+  const content = createElement("div", "map-card-content");
+  const title = createElement("h3", "", map.name);
+  const description = createElement(
+    "p",
+    "",
+    map.description || "Sem descrição."
+  );
+  const actions = createElement("div", "map-card-actions");
+  const viewButton = createElement("button", "", "Visualizar");
+  const removeButton = createElement(
+    "button",
+    "remove-map-button",
+    "Remover"
+  );
+
+  image.src = map.image;
+  image.alt = `Prévia do mapa ${map.name}`;
+  viewButton.type = "button";
+  removeButton.type = "button";
+
+  viewButton.addEventListener("click", () => openMapViewer(map));
+  removeButton.addEventListener("click", () => removeMap(map.id));
+
+  actions.append(viewButton, removeButton);
+  content.append(title, description, actions);
+  card.append(image, content);
+
+  return card;
+}
+
+function renderMaps() {
+  if (!Array.isArray(campaign.maps)) {
+    campaign.maps = [];
+  }
+
+  mapsGrid.replaceChildren();
+  mapsCount.textContent = campaign.maps.length;
+
+  const hasMaps = campaign.maps.length > 0;
+  mapsEmptyState.hidden = hasMaps;
+  mapsGrid.hidden = !hasMaps;
+
+  campaign.maps.forEach((map) => {
+    mapsGrid.appendChild(createMapCard(map));
+  });
+}
+
+async function handleMapSubmit(event) {
+  event.preventDefault();
+
+  const name = mapNameInput.value.trim();
+  const description = mapDescriptionInput.value.trim();
+  const file = mapImageInput.files[0];
+
+  if (!name || !file) {
+    return;
+  }
+
+  const allowedTypes = [
+    "image/png",
+    "image/jpeg",
+    "image/webp"
+  ];
+
+  if (!allowedTypes.includes(file.type)) {
+    window.alert("Escolha uma imagem PNG, JPG ou WebP.");
+    return;
+  }
+
+  if (file.size > 2 * 1024 * 1024) {
+    window.alert("Escolha uma imagem de até 2 MB.");
+    return;
+  }
+
+  try {
+    const image = await readImageFile(file);
+
+    campaign.maps.push({
+      id: createUniqueId(),
+      name,
+      description,
+      image,
+      createdAt: new Date().toISOString()
+    });
+
+    updateCurrentCampaign();
+    renderMaps();
+    closeMapModal();
+  } catch {
+    window.alert("Não foi possível carregar essa imagem.");
+  }
+}
+
+function removeMap(mapId) {
+  const map = campaign.maps.find((item) => item.id === mapId);
+
+  if (!map || !window.confirm(`Remover o mapa "${map.name}"?`)) {
+    return;
+  }
+
+  campaign.maps = campaign.maps.filter((item) => item.id !== mapId);
+  updateCurrentCampaign();
+  renderMaps();
+}
+
+/* ========================================
+   NOTAS DA CAMPANHA
+======================================== */
+
+function getNoteCategoryLabel(category) {
+  const labels = {
+    general: "Geral",
+    clue: "Pista",
+    npc: "NPC",
+    location: "Local",
+    event: "Acontecimento"
+  };
+
+  return labels[category] || "Geral";
+}
+
+function openNoteModal(note = null) {
+  editingNoteId = note?.id || null;
+  noteModalTitle.textContent = note ? "Editar nota" : "Nova nota";
+  noteSubmitButton.textContent = note
+    ? "Salvar alterações"
+    : "Criar nota";
+
+  if (note) {
+    noteTitleInput.value = note.title;
+    noteCategoryInput.value = note.category;
+    noteContentInput.value = note.content;
+  } else {
+    noteForm.reset();
+  }
+
+  noteModal.hidden = false;
+  lockPageScroll();
+
+  window.requestAnimationFrame(() => {
+    noteTitleInput.focus();
+  });
+}
+
+function closeNoteModal() {
+  noteModal.hidden = true;
+  noteForm.reset();
+  editingNoteId = null;
+  noteSubmitButton.textContent = "Criar nota";
+  unlockPageScroll();
+}
+
+function createNoteCard(note) {
+  const card = createElement("article", "note-card");
+  const header = createElement("header", "note-card-header");
+  const title = createElement("h3", "", note.title);
+  const category = createElement(
+    "span",
+    `note-category ${note.category}`,
+    getNoteCategoryLabel(note.category)
+  );
+  const content = createElement("p", "note-card-content", note.content);
+  const actions = createElement("div", "note-card-actions");
+  const editButton = createElement("button", "", "Editar");
+  const removeButton = createElement(
+    "button",
+    "remove-note-button",
+    "Excluir"
+  );
+
+  editButton.type = "button";
+  removeButton.type = "button";
+  editButton.addEventListener("click", () => openNoteModal(note));
+  removeButton.addEventListener("click", () => removeNote(note.id));
+
+  header.append(title, category);
+  actions.append(editButton, removeButton);
+  card.append(header, content, actions);
+
+  return card;
+}
+
+function renderNotes() {
+  if (!Array.isArray(campaign.notes)) {
+    campaign.notes = [];
+  }
+
+  notesGrid.replaceChildren();
+
+  const hasNotes = campaign.notes.length > 0;
+  notesEmptyState.hidden = hasNotes;
+  notesGrid.hidden = !hasNotes;
+
+  campaign.notes.forEach((note) => {
+    notesGrid.appendChild(createNoteCard(note));
+  });
+
+  updateNotesCount();
+}
+
+function handleNoteSubmit(event) {
+  event.preventDefault();
+
+  const title = noteTitleInput.value.trim();
+  const category = noteCategoryInput.value;
+  const content = noteContentInput.value.trim();
+
+  if (!title || !category || !content) {
+    return;
+  }
+
+  if (editingNoteId) {
+    const note = campaign.notes.find((item) => item.id === editingNoteId);
+
+    if (note) {
+      note.title = title;
+      note.category = category;
+      note.content = content;
+      note.updatedAt = new Date().toISOString();
+    }
+  } else {
+    campaign.notes.push({
+      id: createUniqueId(),
+      title,
+      category,
+      content,
+      createdAt: new Date().toISOString()
+    });
+  }
+
+  updateCurrentCampaign();
+  renderNotes();
+  closeNoteModal();
+}
+
+function removeNote(noteId) {
+  const note = campaign.notes.find((item) => item.id === noteId);
+
+  if (!note || !window.confirm(`Excluir a nota "${note.title}"?`)) {
+    return;
+  }
+
+  campaign.notes = campaign.notes.filter((item) => item.id !== noteId);
+  updateCurrentCampaign();
+  renderNotes();
 }
 
 /* ========================================
@@ -1361,8 +1707,41 @@ function handleParticipantOverlayClick(event) {
   }
 }
 
+function handleMapOverlayClick(event) {
+  if (event.target === mapModal) {
+    closeMapModal();
+  }
+}
+
+function handleMapViewerOverlayClick(event) {
+  if (event.target === mapViewerModal) {
+    closeMapViewer();
+  }
+}
+
+function handleNoteOverlayClick(event) {
+  if (event.target === noteModal) {
+    closeNoteModal();
+  }
+}
+
 function handleEscapeKey(event) {
   if (event.key !== "Escape") {
+    return;
+  }
+
+  if (!mapViewerModal.hidden) {
+    closeMapViewer();
+    return;
+  }
+
+  if (!noteModal.hidden) {
+    closeNoteModal();
+    return;
+  }
+
+  if (!mapModal.hidden) {
+    closeMapModal();
     return;
   }
 
@@ -1407,10 +1786,20 @@ function loadCampaignDashboard() {
     campaign.players = [];
   }
 
+  if (!Array.isArray(campaign.maps)) {
+    campaign.maps = [];
+  }
+
+  if (!Array.isArray(campaign.notes)) {
+    campaign.notes = [];
+  }
+
   updateCurrentCampaign();
   updateNotesCount();
   renderPlayers();
   renderCombat();
+  renderMaps();
+  renderNotes();
 }
 
 /* ========================================
@@ -1529,6 +1918,26 @@ finishCombatButton.addEventListener(
   "click",
   finishCombat
 );
+
+/* ========================================
+   EVENTOS DOS MAPAS E NOTAS
+======================================== */
+
+addMapButton.addEventListener("click", openMapModal);
+emptyAddMapButton.addEventListener("click", openMapModal);
+closeMapModalButton.addEventListener("click", closeMapModal);
+cancelMapButton.addEventListener("click", closeMapModal);
+mapForm.addEventListener("submit", handleMapSubmit);
+mapModal.addEventListener("click", handleMapOverlayClick);
+closeMapViewerButton.addEventListener("click", closeMapViewer);
+mapViewerModal.addEventListener("click", handleMapViewerOverlayClick);
+
+createNoteButton.addEventListener("click", () => openNoteModal());
+emptyCreateNoteButton.addEventListener("click", () => openNoteModal());
+closeNoteModalButton.addEventListener("click", closeNoteModal);
+cancelNoteButton.addEventListener("click", closeNoteModal);
+noteForm.addEventListener("submit", handleNoteSubmit);
+noteModal.addEventListener("click", handleNoteOverlayClick);
 
 document.addEventListener(
   "keydown",

@@ -104,6 +104,15 @@
             <p>Anotações</p>
           </div>
         </article>
+
+        <article class="summary-card">
+          <span aria-hidden="true">⌖</span>
+
+          <div>
+            <strong id="maps-count">0</strong>
+            <p>Mapas</p>
+          </div>
+        </article>
       </section>
 
       <!-- CONTEÚDO DO ESCUDO -->
@@ -383,36 +392,124 @@
   </div>
 </section>
 
-        <!-- FERRAMENTAS -->
-        <section class="master-card master-navigation-card">
-          <div class="master-card-heading">
+        <!-- MAPAS -->
+        <section
+          id="campaign-maps"
+          class="master-card maps-card"
+          aria-labelledby="maps-title"
+        >
+          <div class="master-card-heading maps-card-heading">
             <div>
-              <p class="eyebrow">Biblioteca</p>
-              <h2>Ferramentas da campanha</h2>
+              <p class="eyebrow">Cenários</p>
+
+              <h2 id="maps-title">Mapas</h2>
+
+              <p class="section-description">
+                Guarde os cenários importantes e abra o mapa que
+                estiver sendo usado durante a sessão.
+              </p>
             </div>
-          </div>
 
-          <div class="master-navigation-grid">
-            <button type="button">
-              <span aria-hidden="true">♙</span>
-              NPCs e criaturas
-            </button>
-
-            <button type="button">
-              <span aria-hidden="true">◈</span>
-              Mapas
-            </button>
-
-            <button type="button">
-              <span aria-hidden="true">⌁</span>
-              Sessões
-            </button>
-
-            <button type="button">
-              <span aria-hidden="true">✦</span>
-              Arquivos da campanha
+            <button
+              id="add-map-button"
+              class="primary-button"
+              type="button"
+            >
+              <span aria-hidden="true">＋</span>
+              Adicionar mapa
             </button>
           </div>
+
+          <!-- ESTADO VAZIO -->
+          <div id="maps-empty-state" class="maps-empty-state">
+            <div class="empty-state-icon" aria-hidden="true">
+              ⌖
+            </div>
+
+            <h3>Nenhum mapa adicionado</h3>
+
+            <p>
+              Adicione mapas de combate, cidades ou locais
+              importantes para consultá-los durante a campanha.
+            </p>
+
+            <button
+              id="empty-add-map-button"
+              class="secondary-button"
+              type="button"
+            >
+              Adicionar primeiro mapa
+            </button>
+          </div>
+
+          <!-- GALERIA DE MAPAS -->
+          <div
+            id="maps-grid"
+            class="maps-grid"
+            aria-live="polite"
+            hidden
+          ></div>
+        </section>
+
+        <!-- NOTAS DA CAMPANHA -->
+        <section
+          id="campaign-notes"
+          class="master-card notes-card"
+          aria-labelledby="campaign-notes-title"
+        >
+          <div class="master-card-heading notes-card-heading">
+            <div>
+              <p class="eyebrow">Arquivo do Mestre</p>
+
+              <h2 id="campaign-notes-title">
+                Notas da campanha
+              </h2>
+
+              <p class="section-description">
+                Organize pistas, NPCs, locais e acontecimentos que
+                precisam ser lembrados depois da sessão.
+              </p>
+            </div>
+
+            <button
+              id="create-note-button"
+              class="primary-button"
+              type="button"
+            >
+              <span aria-hidden="true">＋</span>
+              Nova nota
+            </button>
+          </div>
+
+          <!-- ESTADO VAZIO -->
+          <div id="notes-empty-state" class="notes-empty-state">
+            <div class="empty-state-icon" aria-hidden="true">
+              ◈
+            </div>
+
+            <h3>Nenhuma nota criada</h3>
+
+            <p>
+              Crie notas permanentes para não perder informações
+              importantes sobre a história da campanha.
+            </p>
+
+            <button
+              id="empty-create-note-button"
+              class="secondary-button"
+              type="button"
+            >
+              Criar primeira nota
+            </button>
+          </div>
+
+          <!-- LISTA DE NOTAS -->
+          <div
+            id="notes-grid"
+            class="notes-grid"
+            aria-live="polite"
+            hidden
+          ></div>
         </section>
       </div>
     </main>
@@ -799,6 +896,236 @@
     </form>
   </div>
 </div>
+
+    <!-- MODAL PARA ADICIONAR MAPA -->
+    <div
+      id="map-modal"
+      class="modal-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="map-modal-title"
+      aria-describedby="map-modal-description"
+      hidden
+    >
+      <div class="modal-card">
+        <header class="modal-header">
+          <div>
+            <p class="eyebrow">Cenário</p>
+
+            <h2 id="map-modal-title">
+              Adicionar mapa
+            </h2>
+
+            <p id="map-modal-description">
+              Escolha uma imagem e identifique o local da campanha.
+            </p>
+          </div>
+
+          <button
+            id="close-map-modal"
+            class="modal-close-button"
+            type="button"
+            aria-label="Fechar modal"
+          >
+            ×
+          </button>
+        </header>
+
+        <form id="map-form">
+          <div class="form-group">
+            <label for="map-name">Nome do mapa</label>
+
+            <input
+              id="map-name"
+              name="mapName"
+              type="text"
+              placeholder="Ex.: Mansão abandonada"
+              maxlength="60"
+              autocomplete="off"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="map-image">Imagem do mapa</label>
+
+            <input
+              id="map-image"
+              name="mapImage"
+              type="file"
+              accept="image/png, image/jpeg, image/webp"
+              required
+            />
+
+            <small>
+              Formatos aceitos: PNG, JPG e WebP.
+            </small>
+          </div>
+
+          <div class="form-group">
+            <label for="map-description">
+              Descrição <span>(opcional)</span>
+            </label>
+
+            <textarea
+              id="map-description"
+              name="mapDescription"
+              rows="3"
+              placeholder="Ex.: Mapa usado durante a investigação do segundo ato."
+              maxlength="240"
+            ></textarea>
+          </div>
+
+          <footer class="modal-actions">
+            <button
+              id="cancel-map-button"
+              class="secondary-button"
+              type="button"
+            >
+              Cancelar
+            </button>
+
+            <button class="primary-button" type="submit">
+              Adicionar mapa
+            </button>
+          </footer>
+        </form>
+      </div>
+    </div>
+
+    <!-- VISUALIZAÇÃO DO MAPA -->
+    <div
+      id="map-viewer-modal"
+      class="modal-overlay map-viewer-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="map-viewer-title"
+      hidden
+    >
+      <div class="map-viewer-card">
+        <header class="map-viewer-header">
+          <div>
+            <p class="eyebrow">Mapa atual</p>
+            <h2 id="map-viewer-title">Mapa</h2>
+          </div>
+
+          <button
+            id="close-map-viewer"
+            class="modal-close-button"
+            type="button"
+            aria-label="Fechar visualização do mapa"
+          >
+            ×
+          </button>
+        </header>
+
+        <img
+          id="map-viewer-image"
+          src=""
+          alt=""
+        />
+
+        <p
+          id="map-viewer-description"
+          class="map-viewer-description"
+        ></p>
+      </div>
+    </div>
+
+    <!-- MODAL PARA CRIAR NOTA -->
+    <div
+      id="note-modal"
+      class="modal-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="note-modal-title"
+      aria-describedby="note-modal-description"
+      hidden
+    >
+      <div class="modal-card">
+        <header class="modal-header">
+          <div>
+            <p class="eyebrow">Arquivo do Mestre</p>
+
+            <h2 id="note-modal-title">
+              Nova nota
+            </h2>
+
+            <p id="note-modal-description">
+              Registre uma informação importante da campanha.
+            </p>
+          </div>
+
+          <button
+            id="close-note-modal"
+            class="modal-close-button"
+            type="button"
+            aria-label="Fechar modal"
+          >
+            ×
+          </button>
+        </header>
+
+        <form id="note-form">
+          <div class="form-group">
+            <label for="note-title">Título</label>
+
+            <input
+              id="note-title"
+              name="noteTitle"
+              type="text"
+              placeholder="Ex.: Suspeitas sobre o diretor"
+              maxlength="70"
+              autocomplete="off"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="note-category">Categoria</label>
+
+            <select
+              id="note-category"
+              name="noteCategory"
+              required
+            >
+              <option value="general">Geral</option>
+              <option value="clue">Pista</option>
+              <option value="npc">NPC</option>
+              <option value="location">Local</option>
+              <option value="event">Acontecimento</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="note-content">Conteúdo</label>
+
+            <textarea
+              id="note-content"
+              name="noteContent"
+              rows="6"
+              placeholder="Escreva os detalhes que o mestre precisa lembrar..."
+              maxlength="1200"
+              required
+            ></textarea>
+          </div>
+
+          <footer class="modal-actions">
+            <button
+              id="cancel-note-button"
+              class="secondary-button"
+              type="button"
+            >
+              Cancelar
+            </button>
+
+            <button class="primary-button" type="submit">
+              Criar nota
+            </button>
+          </footer>
+        </form>
+      </div>
+    </div>
 
     <script src="../scripts/pages/campaign-dashboard.js"></script>
   </body>
