@@ -87,9 +87,70 @@
           </section>
 
           <section class="sheet-card" aria-labelledby="defense-title">
-            <div class="section-heading"><p class="eyebrow">Combate</p><h2 id="defense-title">Defesa</h2></div>
-            <label class="inline-number" for="defense">Defesa <input id="defense" data-field="defense" type="number" min="0" value="10" /></label>
-          </section>
+  <div class="section-heading">
+    <p class="eyebrow">Combate</p>
+    <h2 id="defense-title">Defesa</h2>
+  </div>
+
+  <div class="defense-total">
+    <span>Defesa total</span>
+    <output id="defense-total">11</output>
+  </div>
+
+  <div class="defense-bonus-row">
+    <label class="defense-detail-field">
+      Armadura
+      <input
+        id="armor"
+        type="number"
+        min="0"
+        value="0"
+      />
+    </label>
+
+    <label class="defense-detail-field">
+      Outros
+      <input
+        id="other-defense"
+        type="number"
+        min="0"
+        value="0"
+      />
+    </label>
+  </div>
+
+  <div class="defense-details">
+    <label class="defense-detail-field">
+      Proteção
+      <input
+        id="protection"
+        type="text"
+        maxlength="100"
+        placeholder="Ex.: colete leve"
+      />
+    </label>
+
+    <label class="defense-detail-field">
+      Resistências
+      <input
+        id="resistances"
+        type="text"
+        maxlength="100"
+        placeholder="Ex.: balístico 5"
+      />
+    </label>
+
+    <label class="defense-detail-field">
+      Proficiências
+      <input
+        id="proficiencies"
+        type="text"
+        maxlength="100"
+        placeholder="Ex.: armas táticas"
+      />
+    </label>
+  </div>
+</section>
         </aside>
 
         <div class="sheet-content">
@@ -119,6 +180,7 @@
     <div class="section-heading">
       <p class="eyebrow">Ficha</p>
       <h2 id="details-title">Detalhes da ficha</h2>
+      <p>Informações adicionais sobre o personagem e inventário</p>
     </div>
 
     <button

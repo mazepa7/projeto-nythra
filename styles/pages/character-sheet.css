@@ -1427,6 +1427,62 @@ body[data-sheet-mode="play"] .attribute[data-roll-attribute]:hover {
   transition: 0.2s ease;
 }
 
+.defense-details {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.defense-detail-field {
+  display: grid;
+  gap: 4px;
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+
+.defense-detail-field input {
+  width: 100%;
+  min-width: 0;
+  height: 30px;
+  padding: 0 9px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  outline: 0;
+  background: rgba(8, 8, 18, 0.6);
+  color: var(--text-primary);
+  font-size: 12px;
+}
+
+.defense-detail-field input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+}
+
+.defense-total {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  margin: 14px 0;
+}
+
+.defense-total span {
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.defense-total output {
+  color: var(--text-primary);
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.defense-bonus-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
 .details-collapse-button:hover,
 .details-collapse-button:focus-visible {
   border-color: var(--primary);

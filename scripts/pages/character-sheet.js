@@ -83,7 +83,22 @@ async function inicializarFicha() {
         sheet_data: {}
     });
 
+    function calculateDefense() {
+    return (
+        numberValue("defense") +
+        numberValue("armor") +
+        numberValue("other-defense")
+    );
+}
+
+function updateDefenseTotal() {
+    get("defense-total").textContent =
+        calculateDefense();
+}
+
     updateCalculatedFields();
+
+    updateDefenseTotal();
 
     sheetLoaded = false;
 
@@ -290,7 +305,28 @@ function preencherFicha(ficha) {
     // ==============================
 
     get("defense").value =
-        data.defesa ?? 10;
+    data.defesaBase ??
+    data.defesa ??
+    10;
+
+// ==============================
+// DEFESA
+// ==============================
+
+get("armor").value =
+    data.armadura ?? 0;
+
+get("other-defense").value =
+    data.outrosDefesa ?? 0;
+
+get("protection").value =
+    data.protecao || "";
+
+get("resistances").value =
+    data.resistencias || "";
+
+get("proficiencies").value =
+    data.proficiencias || "";
 
 
     // ==============================
@@ -1542,7 +1578,23 @@ function updateResource(
 // ATUALIZA CAMPOS CALCULADOS
 // ==============================
 
+function calculateDefense() {
+    return (
+        10 +
+        numberValue("agi") +
+        numberValue("armor") +
+        numberValue("other-defense")
+    );
+}
+
+function updateDefenseTotal() {
+    get("defense-total").textContent =
+        calculateDefense();
+}
+
 function updateCalculatedFields() {
+
+    updateDefenseTotal();
 
     const stats =
         calculatedStats();
@@ -1694,9 +1746,22 @@ anotacoes:
         },
 
         defesa:
-            numberValue(
-                "defense"
-            ),
+    calculateDefense(),
+
+armadura:
+    numberValue("armor"),
+
+outrosDefesa:
+    numberValue("other-defense"),
+
+protecao:
+    get("protection").value.trim(),
+
+resistencias:
+    get("resistances").value.trim(),
+
+proficiencias:
+    get("proficiencies").value.trim(),
 
         pv: {
 
@@ -1977,6 +2042,32 @@ function rollD20() {
 
 }
 
+function rollAttributeDice(attributeValue) {
+    const hasPenalty = attributeValue <= 0;
+
+    const diceAmount = hasPenalty
+        ? 2
+        : attributeValue;
+
+    const rolls = [];
+
+    for (let i = 0; i < diceAmount; i++) {
+        rolls.push(
+            rollD20()
+        );
+    }
+
+    const selectedRoll = hasPenalty
+        ? Math.min(...rolls)
+        : Math.max(...rolls);
+
+    return {
+        rolls,
+        selectedRoll,
+        hasPenalty
+    };
+}
+
 
 // ==============================
 // ROLAR PERÍCIA
@@ -2041,38 +2132,14 @@ function rollSkill(button) {
     // Ordem Paranormal:
     // valor do atributo = quantidade de d20
 
-    const diceAmount =
-        Math.max(
-            1,
-            attributeValue
-        );
+    const rollData =
+    rollAttributeDice(
+        attributeValue
+    );
 
-
-    const rolls = [];
-
-
-    for (
-        let i = 0;
-        i < diceAmount;
-        i++
-    ) {
-
-        rolls.push(
-            rollD20()
-        );
-
-    }
-
-
-    const bestRoll =
-        Math.max(
-            ...rolls
-        );
-
-
-    const total =
-        bestRoll +
-        skillBonus;
+const total =
+    rollData.selectedRoll +
+    skillBonus;
 
 
     showRollResult({
@@ -2080,41 +2147,32 @@ function rollSkill(button) {
         attribute,
         attributeValue,
         skillBonus,
-        rolls,
-        bestRoll,
-        total
+        rolls: rollData.rolls,
+selectedRoll: rollData.selectedRoll,
+hasPenalty: rollData.hasPenalty,
+total
     });
 
 }
 
 function rollAttribute(attribute) {
-    const attributeValue = numberValue(attribute);
+    const attributeValue =
+        numberValue(attribute);
 
-    const diceAmount = Math.max(
-        1,
-        attributeValue
-    );
-
-    const rolls = [];
-
-    for (let i = 0; i < diceAmount; i++) {
-        rolls.push(
-            rollD20()
+    const rollData =
+        rollAttributeDice(
+            attributeValue
         );
-    }
-
-    const bestRoll = Math.max(
-        ...rolls
-    );
 
     showRollResult({
         skillName: `Teste de ${attributeNames[attribute]}`,
         attribute,
         attributeValue,
         skillBonus: 0,
-        rolls,
-        bestRoll,
-        total: bestRoll
+        rolls: rollData.rolls,
+        selectedRoll: rollData.selectedRoll,
+        hasPenalty: rollData.hasPenalty,
+        total: rollData.selectedRoll
     });
 }
 
@@ -2128,7 +2186,8 @@ function showRollResult({
     attributeValue,
     skillBonus,
     rolls,
-    bestRoll,
+    selectedRoll,
+    hasPenalty,
     total
 }) {
 
@@ -2178,13 +2237,15 @@ function showRollResult({
 
 
     attributeElement.textContent =
-        `${attributeNames[attribute]} · ${attributeValue}d20 · +${skillBonus}`;
+    hasPenalty
+        ? `${attributeNames[attribute]} · 2d20 (pior resultado) · +${skillBonus}`
+        : `${attributeNames[attribute]} · ${attributeValue}d20 · +${skillBonus}`;
 
 
     diceElement.innerHTML = "";
 
 
-    let bestAlreadyMarked = false;
+    let selectedAlreadyMarked = false;
 
 
     rolls.forEach(
@@ -2205,19 +2266,13 @@ function showRollResult({
 
 
             if (
-                roll === bestRoll &&
-                !bestAlreadyMarked
-            ) {
+    roll === selectedRoll &&
+    !selectedAlreadyMarked
+) {
+    die.classList.add("best");
 
-                die.classList.add(
-                    "best"
-                );
-
-
-                bestAlreadyMarked =
-                    true;
-
-            }
+    selectedAlreadyMarked = true;
+}
 
 
             diceElement.appendChild(
