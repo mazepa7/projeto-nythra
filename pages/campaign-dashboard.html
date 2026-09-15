@@ -233,26 +233,155 @@
         </section>
 
         <!-- COMBATE -->
-        <section class="master-card combat-card">
-          <div class="master-card-heading">
-            <div>
-              <p class="eyebrow">Encontros</p>
-              <h2>Combate rápido</h2>
-            </div>
+        <!-- COMBATE RÁPIDO -->
+<section
+  id="campaign-combat"
+  class="master-card combat-card"
+  aria-labelledby="combat-title"
+>
+  <div class="master-card-heading combat-card-heading">
+    <div>
+      <p class="eyebrow">Encontros</p>
 
-            <button
-              id="create-combat-button"
-              class="secondary-button"
-              type="button"
-            >
-              Novo combate
-            </button>
-          </div>
+      <h2 id="combat-title">
+        Combate rápido
+      </h2>
 
-          <div class="master-empty-list">
-            <p>Nenhum combate em andamento.</p>
-          </div>
-        </section>
+      <p class="section-description">
+        Organize iniciativas, turnos e os recursos dos participantes.
+      </p>
+    </div>
+
+    <button
+      id="create-combat-button"
+      class="primary-button"
+      type="button"
+    >
+      <span aria-hidden="true">＋</span>
+      Novo combate
+    </button>
+  </div>
+
+  <!-- ESTADO VAZIO -->
+  <div
+    id="combat-empty-state"
+    class="combat-empty-state"
+  >
+    <div
+      class="empty-state-icon"
+      aria-hidden="true"
+    >
+      ⚔
+    </div>
+
+    <h3>Nenhum combate em andamento</h3>
+
+    <p>
+      Inicie um encontro para organizar a iniciativa, acompanhar
+      os turnos e controlar a vida dos inimigos.
+    </p>
+
+    <button
+      id="empty-create-combat-button"
+      class="secondary-button"
+      type="button"
+    >
+      Criar primeiro combate
+    </button>
+  </div>
+
+  <!-- COMBATE ATIVO -->
+  <div
+    id="active-combat"
+    class="active-combat"
+    hidden
+  >
+    <header class="active-combat-header">
+      <div>
+        <p class="combat-label">Combate atual</p>
+
+        <h3 id="active-combat-name">
+          Nome do combate
+        </h3>
+      </div>
+
+      <div class="combat-round">
+        <span>Rodada</span>
+        <strong id="combat-round-number">1</strong>
+      </div>
+    </header>
+
+    <div class="combat-toolbar">
+      <button
+        id="add-participant-button"
+        class="secondary-button"
+        type="button"
+      >
+        + Participante
+      </button>
+
+      <div class="turn-controls">
+        <button
+          id="previous-turn-button"
+          class="combat-control-button"
+          type="button"
+          title="Voltar turno"
+          aria-label="Voltar para o turno anterior"
+        >
+          ←
+        </button>
+
+        <span id="current-turn-label">
+          Aguardando participantes
+        </span>
+
+        <button
+          id="next-turn-button"
+          class="combat-control-button"
+          type="button"
+          title="Próximo turno"
+          aria-label="Avançar para o próximo turno"
+        >
+          →
+        </button>
+      </div>
+
+      <button
+        id="finish-combat-button"
+        class="finish-combat-button"
+        type="button"
+      >
+        Encerrar combate
+      </button>
+    </div>
+
+    <!-- LISTA DE INICIATIVA -->
+    <div class="initiative-section">
+      <div class="initiative-heading">
+        <span>Ordem</span>
+        <span>Participante</span>
+        <span>Iniciativa</span>
+        <span>Vida</span>
+        <span>Ações</span>
+      </div>
+
+      <div
+        id="initiative-list"
+        class="initiative-list"
+        aria-live="polite"
+      ></div>
+
+      <div
+        id="initiative-empty"
+        class="initiative-empty"
+      >
+        <p>
+          Adicione jogadores ou inimigos para começar o combate.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
 
         <!-- FERRAMENTAS -->
         <section class="master-card master-navigation-card">
@@ -452,6 +581,224 @@
         </form>
       </div>
     </div>
+
+    <!-- MODAL PARA CRIAR COMBATE -->
+<div
+  id="create-combat-modal"
+  class="modal-overlay"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="create-combat-title"
+  aria-describedby="create-combat-description"
+  hidden
+>
+  <div class="modal-card">
+    <header class="modal-header">
+      <div>
+        <p class="eyebrow">Encontro</p>
+
+        <h2 id="create-combat-title">
+          Novo combate
+        </h2>
+
+        <p id="create-combat-description">
+          Dê um nome ao encontro para iniciar o controle de turnos.
+        </p>
+      </div>
+
+      <button
+        id="close-combat-modal"
+        class="modal-close-button"
+        type="button"
+        aria-label="Fechar modal"
+      >
+        ×
+      </button>
+    </header>
+
+    <form id="create-combat-form">
+      <div class="form-group">
+        <label for="combat-name">
+          Nome do combate
+        </label>
+
+        <input
+          id="combat-name"
+          name="combatName"
+          type="text"
+          placeholder="Ex.: Emboscada no sanatório"
+          maxlength="60"
+          autocomplete="off"
+          required
+        />
+      </div>
+
+      <footer class="modal-actions">
+        <button
+          id="cancel-combat-button"
+          class="secondary-button"
+          type="button"
+        >
+          Cancelar
+        </button>
+
+        <button
+          class="primary-button"
+          type="submit"
+        >
+          Iniciar combate
+        </button>
+      </footer>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL PARA ADICIONAR PARTICIPANTE -->
+<div
+  id="participant-modal"
+  class="modal-overlay"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="participant-modal-title"
+  aria-describedby="participant-modal-description"
+  hidden
+>
+  <div class="modal-card">
+    <header class="modal-header">
+      <div>
+        <p class="eyebrow">Iniciativa</p>
+
+        <h2 id="participant-modal-title">
+          Adicionar participante
+        </h2>
+
+        <p id="participant-modal-description">
+          Adicione um jogador, aliado ou inimigo ao combate.
+        </p>
+      </div>
+
+      <button
+        id="close-participant-modal"
+        class="modal-close-button"
+        type="button"
+        aria-label="Fechar modal"
+      >
+        ×
+      </button>
+    </header>
+
+    <form id="participant-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="participant-type">
+            Tipo
+          </label>
+
+          <select
+            id="participant-type"
+            name="participantType"
+            required
+          >
+            <option value="player">
+              Jogador
+            </option>
+
+            <option value="ally">
+              Aliado
+            </option>
+
+            <option value="enemy">
+              Inimigo
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="participant-initiative">
+            Iniciativa
+          </label>
+
+          <input
+            id="participant-initiative"
+            name="participantInitiative"
+            type="number"
+            placeholder="Ex.: 15"
+            min="-10"
+            max="99"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="participant-name">
+          Nome do participante
+        </label>
+
+        <input
+          id="participant-name"
+          name="participantName"
+          type="text"
+          placeholder="Ex.: Arthur ou Zumbi de Sangue"
+          maxlength="50"
+          autocomplete="off"
+          required
+        />
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="participant-health">
+            Vida atual
+          </label>
+
+          <input
+            id="participant-health"
+            name="participantHealth"
+            type="number"
+            placeholder="Ex.: 30"
+            min="0"
+            max="9999"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="participant-max-health">
+            Vida máxima
+          </label>
+
+          <input
+            id="participant-max-health"
+            name="participantMaxHealth"
+            type="number"
+            placeholder="Ex.: 30"
+            min="1"
+            max="9999"
+            required
+          />
+        </div>
+      </div>
+
+      <footer class="modal-actions">
+        <button
+          id="cancel-participant-button"
+          class="secondary-button"
+          type="button"
+        >
+          Cancelar
+        </button>
+
+        <button
+          class="primary-button"
+          type="submit"
+        >
+          Adicionar participante
+        </button>
+      </footer>
+    </form>
+  </div>
+</div>
 
     <script src="../scripts/pages/campaign-dashboard.js"></script>
   </body>
