@@ -1459,28 +1459,81 @@ body[data-sheet-mode="play"] .attribute[data-roll-attribute]:hover {
 }
 
 .defense-total {
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
-  margin: 14px 0;
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  margin: 18px 0 20px;
+  padding: 14px;
+  border: 1px solid rgba(110, 123, 255, 0.28);
+  border-radius: 12px;
+  background: linear-gradient(
+    135deg,
+    rgba(110, 123, 255, 0.14),
+    rgba(110, 123, 255, 0.03)
+  );
 }
 
 .defense-total span {
-  color: var(--text-secondary);
-  font-size: 13px;
+  color: var(--primary-hover);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 .defense-total output {
   color: var(--text-primary);
-  font-size: 30px;
+  font-size: 48px;
   font-weight: 800;
-  line-height: 1;
+  line-height: 0.95;
+  text-shadow: 0 0 18px rgba(110, 123, 255, 0.32);
 }
 
 .defense-bonus-row {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 8px;
+}
+
+.defense-bonus-row {
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.defense-bonus-row .defense-detail-field {
+  padding: 10px;
+  border: 1px solid rgba(110, 123, 255, 0.22);
+  border-radius: 10px;
+  background: rgba(110, 123, 255, 0.06);
+}
+
+.defense-bonus-row .defense-detail-field {
+  color: var(--primary-hover);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.defense-bonus-row .defense-detail-field input {
+  height: 38px;
+  border-color: rgba(110, 123, 255, 0.3);
+  background: rgba(8, 8, 18, 0.78);
+  color: var(--text-primary);
+  font-size: 18px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.defense-bonus-row .defense-detail-field input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(110, 123, 255, 0.18);
+}
+
+.agent-header,
+.sheet-card,
+.resource-card {
+  background: var(--card);
+  backdrop-filter: none;
 }
 
 .details-collapse-button:hover,

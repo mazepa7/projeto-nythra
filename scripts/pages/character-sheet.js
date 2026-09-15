@@ -83,19 +83,6 @@ async function inicializarFicha() {
         sheet_data: {}
     });
 
-    function calculateDefense() {
-    return (
-        numberValue("defense") +
-        numberValue("armor") +
-        numberValue("other-defense")
-    );
-}
-
-function updateDefenseTotal() {
-    get("defense-total").textContent =
-        calculateDefense();
-}
-
     updateCalculatedFields();
 
     updateDefenseTotal();
@@ -301,13 +288,23 @@ function preencherFicha(ficha) {
 
 
     // ==============================
-    // DEFESA
-    // ==============================
+// DEFESA
+// ==============================
 
-    get("defense").value =
-    data.defesaBase ??
-    data.defesa ??
-    10;
+get("armor").value =
+    data.armadura ?? 0;
+
+get("other-defense").value =
+    data.outrosDefesa ?? 0;
+
+get("protection").value =
+    data.protecao || "";
+
+get("resistances").value =
+    data.resistencias || "";
+
+get("proficiencies").value =
+    data.proficiencias || "";
 
 // ==============================
 // DEFESA

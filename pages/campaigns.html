@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <meta
+      name="description"
+      content="Campanhas de RPG criadas no Nythra."
+    />
+
+    <title>Campanhas | Nythra</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="../styles/global.css" />
+    <link rel="stylesheet" href="../styles/pages/campaigns.css" />
+  </head>
+
+  <body>
+    <header class="app-header container">
+      <a class="logo" href="../index.html">
+        Nythra<span>.</span>
+      </a>
+
+      <div class="header-actions">
+        <a class="back-link" href="./sheets.html">
+          ← Minhas fichas
+        </a>
+      </div>
+    </header>
+
+    <main class="campaigns-page container">
+      <section class="campaigns-hero" aria-labelledby="campaigns-title">
+        <div>
+          <p class="eyebrow">Área do Mestre</p>
+
+          <h1 id="campaigns-title">
+            Suas campanhas
+          </h1>
+
+          <p>
+            Crie, organize e conduza suas histórias em um só lugar.
+          </p>
+        </div>
+
+        <button
+          id="create-campaign-button"
+          class="create-campaign-button"
+          type="button"
+        >
+          + Criar campanha
+        </button>
+      </section>
+
+      <section
+        class="campaigns-section"
+        aria-labelledby="campaigns-list-title"
+      >
+        <div class="section-heading">
+          <p class="eyebrow">Campanhas</p>
+          <h2 id="campaigns-list-title">
+            Aventura em andamento
+          </h2>
+        </div>
+
+        <div id="campaigns-list" class="campaigns-list">
+          <article
+            id="campaigns-empty"
+            class="campaigns-empty"
+          >
+            <div class="campaigns-empty-icon" aria-hidden="true">
+              ✦
+            </div>
+
+            <h2>Nenhuma campanha por aqui</h2>
+
+            <p>
+              Crie sua primeira campanha para organizar sessões,
+              jogadores, mapas, criaturas e anotações.
+            </p>
+
+            <button
+              class="create-campaign-button"
+              type="button"
+              data-create-campaign
+            >
+              Criar primeira campanha
+            </button>
+          </article>
+        </div>
+      </section>
+
+      <section
+        class="master-tools"
+        aria-labelledby="master-tools-title"
+      >
+        <div class="section-heading">
+          <p class="eyebrow">Em breve</p>
+          <h2 id="master-tools-title">
+            Seu escudo de mestre
+          </h2>
+        </div>
+
+        <div class="master-tools-grid">
+          <article class="master-tool-card">
+            <span aria-hidden="true">♟</span>
+            <h3>Jogadores</h3>
+            <p>Veja as fichas e recursos do grupo rapidamente.</p>
+          </article>
+
+          <article class="master-tool-card">
+            <span aria-hidden="true">⚔</span>
+            <h3>Combates</h3>
+            <p>Organize iniciativa, inimigos e encontros.</p>
+          </article>
+
+          <article class="master-tool-card">
+            <span aria-hidden="true">◈</span>
+            <h3>Mapas e notas</h3>
+            <p>Centralize locais, pistas e informações da sessão.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <script src="../scripts/pages/campaigns.js"></script>
+  </body>
+</html>

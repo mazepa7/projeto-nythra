@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <meta
+      name="description"
+      content="Escudo de mestre da campanha no Nythra."
+    />
+
+    <title>Escudo de Mestre | Nythra</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="../styles/global.css" />
+    <link
+      rel="stylesheet"
+      href="../styles/pages/campaign-dashboard.css"
+    />
+  </head>
+
+  <body>
+    <header class="app-header container">
+      <a class="logo" href="../index.html">
+        Nythra<span>.</span>
+      </a>
+
+      <div class="header-actions">
+        <a class="back-link" href="./campaigns.html">
+          ← Campanhas
+        </a>
+      </div>
+    </header>
+
+    <main class="campaign-dashboard container">
+      <section
+        class="campaign-dashboard-header"
+        aria-labelledby="campaign-name"
+      >
+        <div>
+          <p class="eyebrow">Escudo de Mestre</p>
+
+          <h1 id="campaign-name">
+            Carregando campanha...
+          </h1>
+
+          <p id="campaign-description">
+            Organize sua próxima sessão.
+          </p>
+        </div>
+
+        <div class="campaign-status">
+          <span>Status da campanha</span>
+          <strong>Em preparação</strong>
+        </div>
+      </section>
+
+      <section class="master-summary" aria-label="Resumo da campanha">
+        <article class="summary-card">
+          <span>♟</span>
+          <div>
+            <strong id="players-count">0</strong>
+            <p>Jogadores</p>
+          </div>
+        </article>
+
+        <article class="summary-card">
+          <span>⚔</span>
+          <div>
+            <strong id="combat-count">0</strong>
+            <p>Combates ativos</p>
+          </div>
+        </article>
+
+        <article class="summary-card">
+          <span>◈</span>
+          <div>
+            <strong id="notes-count">0</strong>
+            <p>Anotações</p>
+          </div>
+        </article>
+      </section>
+
+      <div class="master-dashboard-grid">
+        <section class="master-card session-card">
+          <div class="master-card-heading">
+            <div>
+              <p class="eyebrow">Sessão</p>
+              <h2>Sessão atual</h2>
+            </div>
+
+            <button
+              id="edit-session-button"
+              class="secondary-button"
+              type="button"
+            >
+              Editar
+            </button>
+          </div>
+
+          <div class="session-empty">
+            <span aria-hidden="true">✦</span>
+            <h3>Nenhuma sessão preparada</h3>
+            <p>
+              Registre a próxima sessão para manter a campanha
+              organizada.
+            </p>
+
+            <button
+              id="create-session-button"
+              class="primary-button"
+              type="button"
+            >
+              Criar sessão
+            </button>
+          </div>
+        </section>
+
+        <section class="master-card quick-notes-card">
+          <div class="master-card-heading">
+            <div>
+              <p class="eyebrow">Anotações</p>
+              <h2>Notas rápidas</h2>
+            </div>
+
+            <span id="notes-status" class="save-indicator">
+              Salvo
+            </span>
+          </div>
+
+          <textarea
+            id="quick-notes"
+            rows="9"
+            placeholder="Pistas, improvisos, nomes, consequências e qualquer detalhe importante para a sessão..."
+          ></textarea>
+        </section>
+
+        <section class="master-card players-card">
+          <div class="master-card-heading">
+            <div>
+              <p class="eyebrow">Grupo</p>
+              <h2>Jogadores</h2>
+            </div>
+
+            <button
+              id="manage-players-button"
+              class="secondary-button"
+              type="button"
+            >
+              Gerenciar
+            </button>
+          </div>
+
+          <div class="master-empty-list">
+            <p>Nenhum jogador vinculado à campanha.</p>
+          </div>
+        </section>
+
+        <section class="master-card combat-card">
+          <div class="master-card-heading">
+            <div>
+              <p class="eyebrow">Encontros</p>
+              <h2>Combate rápido</h2>
+            </div>
+
+            <button
+              id="create-combat-button"
+              class="secondary-button"
+              type="button"
+            >
+              Novo combate
+            </button>
+          </div>
+
+          <div class="master-empty-list">
+            <p>Nenhum combate em andamento.</p>
+          </div>
+        </section>
+
+        <section class="master-card master-navigation-card">
+          <div class="master-card-heading">
+            <div>
+              <p class="eyebrow">Biblioteca</p>
+              <h2>Ferramentas da campanha</h2>
+            </div>
+          </div>
+
+          <div class="master-navigation-grid">
+            <button type="button">
+              <span>♙</span>
+              NPCs e criaturas
+            </button>
+
+            <button type="button">
+              <span>◈</span>
+              Mapas
+            </button>
+
+            <button type="button">
+              <span>⌁</span>
+              Sessões
+            </button>
+
+            <button type="button">
+              <span>✦</span>
+              Arquivos da campanha
+            </button>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script src="../scripts/pages/campaign-dashboard.js"></script>
+  </body>
+</html>

@@ -1,0 +1,340 @@
+body {
+  min-height: 100vh;
+}
+
+.app-header.container,
+.campaign-dashboard.container {
+  width: min(1180px, calc(100% - 40px));
+  margin: 0 auto;
+}
+
+.app-header.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+}
+
+.logo {
+  color: var(--text);
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: -0.8px;
+  text-decoration: none;
+}
+
+.logo span {
+  color: var(--primary);
+}
+
+.back-link {
+  padding: 9px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: 0.2s ease;
+}
+
+.back-link:hover {
+  border-color: rgba(110, 123, 255, 0.45);
+  background: rgba(110, 123, 255, 0.1);
+  color: var(--text);
+}
+
+.campaign-dashboard {
+  padding: 16px 0 52px;
+}
+
+.campaign-dashboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 28px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background: var(--card);
+}
+
+.campaign-dashboard-header h1 {
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(28px, 4vw, 38px);
+  letter-spacing: -1.2px;
+}
+
+.campaign-dashboard-header p:last-child {
+  margin: 9px 0 0;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.campaign-status {
+  display: grid;
+  gap: 5px;
+  min-width: 145px;
+  padding: 12px 14px;
+  border: 1px solid rgba(110, 123, 255, 0.25);
+  border-radius: 10px;
+  background: rgba(110, 123, 255, 0.07);
+}
+
+.campaign-status span {
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+
+.campaign-status strong {
+  color: var(--primary-hover);
+  font-size: 13px;
+}
+
+.master-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 18px 0;
+}
+
+.summary-card {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 16px 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--card);
+}
+
+.summary-card > span {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border-radius: 10px;
+  background: rgba(110, 123, 255, 0.12);
+  color: var(--primary-hover);
+  font-size: 17px;
+}
+
+.summary-card strong {
+  display: block;
+  color: var(--text);
+  font-size: 22px;
+  line-height: 1;
+}
+
+.summary-card p {
+  margin: 4px 0 0;
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.master-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.master-card {
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--card);
+}
+
+.master-card-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.master-card-heading h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: 19px;
+  letter-spacing: -0.4px;
+}
+
+.session-card,
+.quick-notes-card {
+  min-height: 310px;
+}
+
+.session-empty {
+  display: grid;
+  justify-items: center;
+  padding: 38px 20px 16px;
+  text-align: center;
+}
+
+.session-empty > span {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  margin-bottom: 12px;
+  place-items: center;
+  border: 1px solid rgba(110, 123, 255, 0.3);
+  border-radius: 12px;
+  background: rgba(110, 123, 255, 0.1);
+  color: var(--primary-hover);
+  font-size: 19px;
+}
+
+.session-empty h3 {
+  margin: 0;
+  color: var(--text);
+  font-size: 16px;
+}
+
+.session-empty p,
+.master-empty-list p {
+  margin: 8px 0 16px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.primary-button,
+.secondary-button {
+  border-radius: 8px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.primary-button {
+  padding: 10px 13px;
+  border: 1px solid rgba(110, 123, 255, 0.45);
+  background: var(--primary);
+  color: #fff;
+}
+
+.primary-button:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+.secondary-button {
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+}
+
+.secondary-button:hover {
+  border-color: rgba(110, 123, 255, 0.45);
+  color: var(--text);
+}
+
+.quick-notes-card textarea {
+  width: 100%;
+  min-height: 210px;
+  margin-top: 18px;
+  padding: 14px;
+  resize: vertical;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  outline: none;
+  background: rgba(8, 8, 18, 0.65);
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.quick-notes-card textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(110, 123, 255, 0.14);
+}
+
+.save-indicator {
+  color: var(--success);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.master-empty-list {
+  display: grid;
+  min-height: 102px;
+  place-items: center;
+  margin-top: 18px;
+  border: 1px dashed rgba(110, 123, 255, 0.24);
+  border-radius: 10px;
+  text-align: center;
+}
+
+.master-empty-list p {
+  margin: 0;
+}
+
+.master-navigation-card {
+  grid-column: 1 / -1;
+}
+
+.master-navigation-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.master-navigation-grid button {
+  display: grid;
+  justify-items: center;
+  gap: 9px;
+  padding: 16px 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: rgba(110, 123, 255, 0.04);
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.master-navigation-grid button span {
+  color: var(--primary-hover);
+  font-size: 18px;
+}
+
+.master-navigation-grid button:hover {
+  border-color: rgba(110, 123, 255, 0.45);
+  background: rgba(110, 123, 255, 0.1);
+  color: var(--text);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 760px) {
+  .app-header.container,
+  .campaign-dashboard.container {
+    width: min(100% - 32px, 1180px);
+  }
+
+  .campaign-dashboard-header {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 22px;
+  }
+
+  .master-summary,
+  .master-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .master-navigation-card {
+    grid-column: auto;
+  }
+
+  .master-navigation-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
