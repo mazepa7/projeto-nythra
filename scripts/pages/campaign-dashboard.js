@@ -16,6 +16,79 @@ const campaignName =
 const campaignDescription =
   document.querySelector("#campaign-description");
 
+const campaignStatus =
+  document.querySelector(".campaign-status strong");
+
+/* ========================================
+   SESSÃO ATUAL
+======================================== */
+
+const sessionEmptyState =
+  document.querySelector("#session-empty-state");
+
+const sessionContent =
+  document.querySelector("#session-content");
+
+const createSessionButton =
+  document.querySelector("#create-session-button");
+
+const editSessionButton =
+  document.querySelector("#edit-session-button");
+
+const sessionNumber =
+  document.querySelector("#session-number");
+
+const sessionTitle =
+  document.querySelector("#session-title");
+
+const sessionStatus =
+  document.querySelector("#session-status");
+
+const sessionDate =
+  document.querySelector("#session-date");
+
+const sessionObjective =
+  document.querySelector("#session-objective");
+
+const sessionSummary =
+  document.querySelector("#session-summary");
+
+const sessionModal =
+  document.querySelector("#session-modal");
+
+const sessionModalTitle =
+  document.querySelector("#session-modal-title");
+
+const closeSessionModalButton =
+  document.querySelector("#close-session-modal");
+
+const cancelSessionButton =
+  document.querySelector("#cancel-session-button");
+
+const sessionForm =
+  document.querySelector("#session-form");
+
+const sessionTitleInput =
+  document.querySelector("#session-title-input");
+
+const sessionNumberInput =
+  document.querySelector("#session-number-input");
+
+const sessionDateInput =
+  document.querySelector("#session-date-input");
+
+const sessionStatusInput =
+  document.querySelector("#session-status-input");
+
+const sessionObjectiveInput =
+  document.querySelector("#session-objective-input");
+
+const sessionSummaryInput =
+  document.querySelector("#session-summary-input");
+
+const saveSessionButton =
+  document.querySelector("#save-session-button");
+
 /* ========================================
    ANOTAÇÕES
 ======================================== */
@@ -348,6 +421,7 @@ function lockPageScroll() {
 
 function unlockPageScroll() {
   const hasOpenModal =
+    !sessionModal.hidden ||
     !linkPlayerModal.hidden ||
     !createCombatModal.hidden ||
     !participantModal.hidden ||
@@ -358,6 +432,150 @@ function unlockPageScroll() {
   if (!hasOpenModal) {
     document.body.style.overflow = "";
   }
+}
+
+/* ========================================
+   SESSÃO ATUAL
+======================================== */
+
+function getSessionStatusLabel(status) {
+  const labels = {
+    planned: "Planejada",
+    "in-progress": "Em andamento",
+    finished: "Encerrada"
+  };
+
+  return labels[status] || labels.planned;
+}
+
+function formatSessionDate(date) {
+  if (!date) {
+    return "Não definida";
+  }
+
+  const [year, month, day] = date.split("-");
+
+  if (!year || !month || !day) {
+    return "Não definida";
+  }
+
+  return `${day}/${month}/${year}`;
+}
+
+function openSessionModal() {
+  const currentSession = campaign.currentSession;
+  const isEditing = Boolean(currentSession);
+
+  sessionModalTitle.textContent = isEditing
+    ? "Editar sessão"
+    : "Criar sessão";
+
+  saveSessionButton.textContent = isEditing
+    ? "Salvar alterações"
+    : "Criar sessão";
+
+  if (currentSession) {
+    sessionTitleInput.value = currentSession.title;
+    sessionNumberInput.value = currentSession.number;
+    sessionDateInput.value = currentSession.date || "";
+    sessionStatusInput.value = currentSession.status;
+    sessionObjectiveInput.value = currentSession.objective || "";
+    sessionSummaryInput.value = currentSession.summary || "";
+  } else {
+    sessionForm.reset();
+    sessionNumberInput.value = "1";
+    sessionStatusInput.value = "planned";
+  }
+
+  sessionModal.hidden = false;
+  lockPageScroll();
+
+  window.requestAnimationFrame(() => {
+    sessionTitleInput.focus();
+  });
+}
+
+function closeSessionModal() {
+  sessionModal.hidden = true;
+  sessionForm.reset();
+  saveSessionButton.textContent = "Criar sessão";
+  unlockPageScroll();
+}
+
+function renderSession() {
+  const currentSession = campaign.currentSession;
+  const hasSession = Boolean(currentSession);
+
+  sessionEmptyState.hidden = hasSession;
+  sessionContent.hidden = !hasSession;
+  editSessionButton.hidden = !hasSession;
+
+  if (!currentSession) {
+    campaignStatus.textContent = "Em preparação";
+    return;
+  }
+
+  const statusLabel = getSessionStatusLabel(
+    currentSession.status
+  );
+
+  sessionNumber.textContent =
+    `Sessão ${currentSession.number}`;
+  sessionTitle.textContent = currentSession.title;
+  sessionStatus.textContent = statusLabel;
+  sessionStatus.className =
+    `session-status ${currentSession.status}`;
+  sessionDate.textContent =
+    formatSessionDate(currentSession.date);
+  sessionObjective.textContent =
+    currentSession.objective ||
+    "Nenhum objetivo informado.";
+  sessionSummary.textContent =
+    currentSession.summary ||
+    "Nenhuma preparação adicionada.";
+  campaignStatus.textContent = statusLabel;
+}
+
+function handleSessionSubmit(event) {
+  event.preventDefault();
+
+  const title = sessionTitleInput.value.trim();
+  const number = Number(sessionNumberInput.value);
+  const date = sessionDateInput.value;
+  const status = sessionStatusInput.value;
+  const objective = sessionObjectiveInput.value.trim();
+  const summary = sessionSummaryInput.value.trim();
+
+  if (
+    !title ||
+    !Number.isInteger(number) ||
+    number < 1 ||
+    number > 999
+  ) {
+    return;
+  }
+
+  const createdAt =
+    campaign.currentSession?.createdAt ||
+    new Date().toISOString();
+
+  campaign.currentSession = {
+    id:
+      campaign.currentSession?.id ||
+      createUniqueId(),
+    title,
+    number,
+    date,
+    status,
+    objective,
+    summary,
+    createdAt,
+    updatedAt: new Date().toISOString()
+  };
+
+  updateCurrentCampaign();
+  renderSession();
+  closeSessionModal();
 }
 
 /* ========================================
@@ -1695,6 +1913,12 @@ function handlePlayerOverlayClick(event) {
   }
 }
 
+function handleSessionOverlayClick(event) {
+  if (event.target === sessionModal) {
+    closeSessionModal();
+  }
+}
+
 function handleCombatOverlayClick(event) {
   if (event.target === createCombatModal) {
     closeCombatModal();
@@ -1727,6 +1951,11 @@ function handleNoteOverlayClick(event) {
 
 function handleEscapeKey(event) {
   if (event.key !== "Escape") {
+    return;
+  }
+
+  if (!sessionModal.hidden) {
+    closeSessionModal();
     return;
   }
 
@@ -1795,6 +2024,7 @@ function loadCampaignDashboard() {
   }
 
   updateCurrentCampaign();
+  renderSession();
   updateNotesCount();
   renderPlayers();
   renderCombat();
@@ -1809,6 +2039,40 @@ function loadCampaignDashboard() {
 quickNotes.addEventListener(
   "input",
   scheduleNotesSave
+);
+
+/* ========================================
+   EVENTOS DA SESSÃO
+======================================== */
+
+createSessionButton.addEventListener(
+  "click",
+  openSessionModal
+);
+
+editSessionButton.addEventListener(
+  "click",
+  openSessionModal
+);
+
+closeSessionModalButton.addEventListener(
+  "click",
+  closeSessionModal
+);
+
+cancelSessionButton.addEventListener(
+  "click",
+  closeSessionModal
+);
+
+sessionModal.addEventListener(
+  "click",
+  handleSessionOverlayClick
+);
+
+sessionForm.addEventListener(
+  "submit",
+  handleSessionSubmit
 );
 
 /* ========================================
