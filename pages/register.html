@@ -3,215 +3,100 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <meta
-      name="description"
-      content="Crie sua conta no Nythra e comece sua próxima aventura."
-    />
-
+    <meta name="description" content="Crie sua conta no Nythra e comece sua próxima aventura." />
     <title>Criar conta | Nythra</title>
-    <link rel="icon" href="assets\branding\logo\nythra-logo.png" type="image/x-icon">
-
+    <link rel="icon" href="../assets/branding/logo/nythra-logo.png" type="image/png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-
-    <link
-      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../styles/pages/register.css" />
     <link rel="stylesheet" href="../styles/pages/login.css" />
     <link rel="stylesheet" href="../styles/components.css" />
     <link rel="stylesheet" href="../styles/global.css" />
+    <link rel="stylesheet" href="../styles/pages/register-verification.css" />
   </head>
-
   <body class="login-page">
-
     <main class="login-layout">
-
-      <section
-        class="login-showcase"
-        aria-labelledby="showcase-title"
-      >
-
-        <a
-          class="brand"
-          href="../index.html"
-          aria-label="Página inicial do Nythra"
-        >
+      <section class="login-showcase" aria-labelledby="showcase-title">
+        <a class="brand" href="../index.html" aria-label="Página inicial do Nythra">
           <span class="brand-mark" aria-hidden="true">N</span>
           <span class="brand-name">Nythra</span>
         </a>
-
         <div class="showcase-content">
-
-          <p class="eyebrow">
-            Uma nova aventura
-          </p>
-
-          <h1 id="showcase-title">
-            Create your story.
-          </h1>
-
-          <p class="showcase-description">
-            Crie sua conta e mantenha seus personagens,
-            campanhas e aventuras sempre com você.
-          </p>
-
+          <p class="eyebrow">Uma nova aventura</p>
+          <h1 id="showcase-title">Create your story.</h1>
+          <p class="showcase-description">Crie sua conta e mantenha seus personagens, campanhas e aventuras sempre com você.</p>
         </div>
-
-        <p class="showcase-footer">
-          You choose the adventure.
-        </p>
-
+        <p class="showcase-footer">You choose the adventure.</p>
       </section>
-
-
-      <section
-        class="login-panel"
-        aria-labelledby="register-title"
-      >
-
+      <section class="login-panel" aria-labelledby="register-title">
         <div class="login-card">
-
           <header class="login-header">
-
-            <p class="eyebrow">
-              Comece agora
-            </p>
-
-            <h2 id="register-title">
-              Criar sua conta
-            </h2>
-
-            <p>
-              Sua próxima aventura começa aqui.
-            </p>
-
+            <p class="eyebrow" id="register-eyebrow">Comece agora</p>
+            <h2 id="register-title" tabindex="-1">Criar sua conta</h2>
+            <p id="register-description">Sua próxima aventura começa aqui.</p>
           </header>
 
+          <div id="registration-step">
+            <form class="login-form" id="register-form">
+              <div class="form-field">
+                <label for="username">Nome de usuário</label>
+                <input id="username" name="username" type="text" placeholder="Como devemos chamar você?" autocomplete="username" minlength="3" maxlength="30" required />
+              </div>
+              <div class="form-field">
+                <label for="email">E-mail</label>
+                <input id="email" name="email" type="email" placeholder="voce@email.com" autocomplete="email" maxlength="254" required />
+              </div>
+              <div class="form-field">
+                <label for="password">Senha</label>
+                <input id="password" name="password" type="password" placeholder="Mínimo de 8 caracteres" autocomplete="new-password" minlength="8" required />
+              </div>
+              <div class="form-field">
+                <label for="confirm-password">Confirmar senha</label>
+                <input id="confirm-password" name="confirm-password" type="password" placeholder="Digite sua senha novamente" autocomplete="new-password" minlength="8" required />
+              </div>
+              <p class="form-message" id="register-message" role="status" aria-live="polite" hidden></p>
+              <button class="button button-primary" id="register-button" type="submit">Criar conta</button>
+            </form>
+            <button class="text-link verification-text-button" id="open-verification-button" type="button">Já tenho uma conta para confirmar</button>
+          </div>
 
-          <form
-            class="login-form"
-            id="register-form"
-          >
-
-            <div class="form-field">
-
-              <label for="username">
-                Nome de usuário
-              </label>
-
-              <input
-                id="username"
-                name="username"
-                type="text"
-                placeholder="Como devemos chamar você?"
-                autocomplete="username"
-                minlength="3"
-                maxlength="30"
-                required
-              />
-
+          <section id="verification-step" aria-label="Confirmação do e-mail" hidden>
+            <form class="login-form" id="verification-form">
+              <div class="form-field">
+                <label for="verification-email">E-mail da conta</label>
+                <input id="verification-email" name="email" type="email" autocomplete="email" maxlength="254" placeholder="voce@email.com" required />
+              </div>
+              <div class="form-field">
+                <label for="verification-code">Código de confirmação</label>
+                <input id="verification-code" name="code" class="verification-code" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" minlength="6" maxlength="6" placeholder="000000" aria-describedby="verification-help" required />
+                <p class="verification-help" id="verification-help">Digite os 6 dígitos recebidos por e-mail. O código vale por 10 minutos. Confira também o spam.</p>
+              </div>
+              <p class="form-message" id="verification-message" role="status" aria-live="polite" hidden></p>
+              <button class="button button-primary" id="verify-button" type="submit">Confirmar cadastro</button>
+            </form>
+            <div class="verification-resend">
+              <div class="form-field" id="resend-password-field" hidden>
+                <label for="resend-password">Senha da conta Nythra</label>
+                <input id="resend-password" type="password" autocomplete="current-password" aria-describedby="resend-password-help" />
+                <p class="verification-help" id="resend-password-help">Necessária somente para solicitar um novo código.</p>
+              </div>
+              <button class="button" id="resend-code-button" type="button">Reenviar código</button>
+              <p class="verification-help" id="resend-status"></p>
+              <button class="text-link verification-text-button" id="back-to-register-button" type="button">Voltar ao cadastro</button>
             </div>
+          </section>
 
-
-            <div class="form-field">
-
-              <label for="email">
-                E-mail
-              </label>
-
-              <input
-                id="email"
-                name="email"
-                type="email"
-                placeholder="voce@email.com"
-                autocomplete="email"
-                required
-              />
-
-            </div>
-
-
-            <div class="form-field">
-
-              <label for="password">
-                Senha
-              </label>
-
-              <input
-                id="password"
-                name="password"
-                type="password"
-                placeholder="Mínimo de 8 caracteres"
-                autocomplete="new-password"
-                minlength="8"
-                required
-              />
-
-            </div>
-
-
-            <div class="form-field">
-
-              <label for="confirm-password">
-                Confirmar senha
-              </label>
-
-              <input
-                id="confirm-password"
-                name="confirm-password"
-                type="password"
-                placeholder="Digite sua senha novamente"
-                autocomplete="new-password"
-                minlength="8"
-                required
-              />
-
-            </div>
-
-
-            <p
-              class="form-message hidden"
-              id="register-message"
-            ></p>
-
-
-            <button
-              class="button button-primary"
-              id="register-button"
-              type="submit"
-            >
-              Criar conta
-            </button>
-
-          </form>
-
-
-          <p class="signup-prompt">
-
-            Já possui uma conta?
-
-            <a
-              href="login.html"
-              class="text-link"
-            >
-              Entrar
-            </a>
-
-          </p>
-
+          <section id="verification-success" aria-label="Cadastro confirmado" hidden>
+            <p class="form-message form-message-success" role="status">E-mail confirmado! Você já pode entrar com seu e-mail e senha.</p>
+            <a class="button button-primary" href="./login.html">Ir para o login</a>
+            <p class="verification-help">Você será encaminhado para o login em instantes.</p>
+          </section>
+          <p class="signup-prompt" id="signup-prompt">Já possui uma conta? <a href="login.html" class="text-link">Entrar</a></p>
         </div>
-
       </section>
-
     </main>
-
-
     <script src="../scripts/api.js"></script>
     <script src="../scripts/register.js"></script>
-
   </body>
 </html>

@@ -171,21 +171,6 @@ const cancelPlayerLinkButton =
 const linkPlayerForm =
   document.querySelector("#link-player-form");
 
-const playerNameInput =
-  document.querySelector("#player-name");
-
-const characterNameInput =
-  document.querySelector("#character-name");
-
-const characterOriginInput =
-  document.querySelector("#character-origin");
-
-const characterClassInput =
-  document.querySelector("#character-class");
-
-const characterNexInput =
-  document.querySelector("#character-nex");
-
 /* ========================================
    COMBATE
 ======================================== */
@@ -296,55 +281,23 @@ let saveTimer = null;
 
 let editingNoteId = null;
 
-let campaigns = loadCampaigns();
-
-let campaign = campaigns.find((item) => {
-  return String(item.id) === String(campaignId);
-});
-
-/* ========================================
-   ARMAZENAMENTO
-======================================== */
-
-function loadCampaigns() {
-  const savedCampaigns =
-    localStorage.getItem(storageKey);
-
-  if (!savedCampaigns) {
-    return [];
-  }
-
-  try {
-    const parsedCampaigns =
-      JSON.parse(savedCampaigns);
-
-    return Array.isArray(parsedCampaigns)
-      ? parsedCampaigns
-      : [];
-  } catch {
-    return [];
-  }
-}
-
-function saveCampaigns() {
-  localStorage.setItem(
-    storageKey,
-    JSON.stringify(campaigns)
-  );
-}
-
+let campaign = null;
+let saveQueue = Promise.resolve();
 function updateCurrentCampaign() {
-  if (!campaign) {
-    return;
-  }
-
-  campaigns = campaigns.map((item) => {
-    return String(item.id) === String(campaign.id)
-      ? campaign
-      : item;
+  if (!campaign) return Promise.resolve(false);
+  const snapshot = JSON.stringify(campaign);
+  document.querySelector('#campaign-save-status').textContent = 'Salvando...';
+  saveQueue = saveQueue.then(async () => {
+    try {
+      await apiRequest(`/campaigns/${encodeURIComponent(campaignId)}`, { method: 'PUT', body: snapshot });
+      document.querySelector('#campaign-save-status').textContent = 'Salvo';
+      return true;
+    } catch (error) {
+      document.querySelector('#campaign-save-status').textContent = `Alterações não salvas: ${error.message}`;
+      return false;
+    }
   });
-
-  saveCampaigns();
+  return saveQueue;
 }
 
 /* ========================================
@@ -595,16 +548,15 @@ function updateNotesCount() {
     quickNotesAmount + permanentNotesAmount;
 }
 
-function saveQuickNotes() {
+async function saveQuickNotes() {
   if (!campaign) {
     return;
   }
 
   campaign.quickNotes = quickNotes.value;
 
-  updateCurrentCampaign();
-
-  notesStatus.textContent = "Salvo";
+  const saved = await updateCurrentCampaign();
+  notesStatus.textContent = saved ? "Salvo" : "Falha ao salvar";
 
   updateNotesCount();
 }
@@ -929,7 +881,7 @@ function openPlayerModal() {
   lockPageScroll();
 
   window.requestAnimationFrame(() => {
-    playerNameInput.focus();
+    document.querySelector("#player-id").focus();
   });
 }
 
@@ -1030,7 +982,7 @@ function createPlayerCard(player) {
   const nex = createElement(
     "span",
     "player-nex",
-    `NEX ${player.characterNex}`
+    `ID: ${player.id}`
   );
 
   cardHeader.append(identity, nex);
@@ -1044,7 +996,7 @@ function createPlayerCard(player) {
     createElement(
       "span",
       "player-detail",
-      player.characterClass
+      player.characterClass || "Conta vinculada"
     ),
     createElement(
       "span",
@@ -1139,80 +1091,26 @@ function renderPlayers() {
   });
 }
 
-function handlePlayerSubmit(event) {
+async function handlePlayerSubmit(event) {
   event.preventDefault();
-
-  if (!campaign) {
-    return;
-  }
-
-  const playerName =
-    playerNameInput.value.trim();
-
-  const characterName =
-    characterNameInput.value.trim();
-
-  const characterOrigin =
-    characterOriginInput.value.trim();
-
-  const characterClass =
-    characterClassInput.value;
-
-  const characterNex =
-    characterNexInput.value;
-
-  if (
-    !playerName ||
-    !characterName ||
-    !characterClass ||
-    !characterNex
-  ) {
-    return;
-  }
-
-  const newPlayer = {
-    id: createUniqueId(),
-    playerName,
-    characterName,
-    characterOrigin,
-    characterClass,
-    characterNex,
-    health: null,
-    sanity: null,
-    effort: null,
-    createdAt: new Date().toISOString()
-  };
-
-  campaign.players.push(newPlayer);
-
-  updateCurrentCampaign();
-  renderPlayers();
-  closePlayerModal();
+  const button = linkPlayerForm.querySelector('[type="submit"]');
+  button.disabled = true;
+  try {
+    const result = await apiRequest(`/campaigns/${encodeURIComponent(campaignId)}/players`, {
+      method: 'POST', body: JSON.stringify({ userId: document.querySelector('#player-id').value.trim() })
+    });
+    campaign.players.push(result.jogador);
+    renderPlayers(); closePlayerModal();
+  } catch (error) { document.querySelector('#player-link-message').textContent = error.message; }
+  finally { button.disabled = false; }
 }
-
-function removePlayer(playerId) {
-  const player = campaign.players.find(
-    (item) => item.id === playerId
-  );
-
-  if (!player) {
-    return;
-  }
-
-  const shouldRemove = window.confirm(
-    `Remover ${player.characterName} desta campanha?`
-  );
-
-  if (!shouldRemove) {
-    return;
-  }
-
-  campaign.players = campaign.players.filter(
-    (item) => item.id !== playerId
-  );
-
-  updateCurrentCampaign();
-  renderPlayers();
+async function removePlayer(playerId) {
+  if (!confirm('Remover este jogador da campanha?')) return;
+  try {
+    await apiRequest(`/campaigns/${encodeURIComponent(campaignId)}/players/${encodeURIComponent(playerId)}`, { method: 'DELETE' });
+    campaign.players = campaign.players.filter(player => player.id !== playerId);
+    renderPlayers();
+  } catch (error) { window.alert(error.message); }
 }
 
 /* ========================================
@@ -2023,7 +1921,6 @@ function loadCampaignDashboard() {
     campaign.notes = [];
   }
 
-  updateCurrentCampaign();
   renderSession();
   updateNotesCount();
   renderPlayers();
@@ -2212,4 +2109,12 @@ document.addEventListener(
    INICIALIZAÇÃO
 ======================================== */
 
-loadCampaignDashboard();
+(async () => {
+  try {
+    if (!pegarToken()) { location.href = './login.html'; return; }
+    const result = await apiRequest(`/campaigns/${encodeURIComponent(campaignId)}`);
+    campaign = result.campanha;
+    loadCampaignDashboard();
+    document.querySelector('main').hidden = false;
+  } catch (error) { document.querySelector('#campaign-save-status').textContent = error.message; }
+})();

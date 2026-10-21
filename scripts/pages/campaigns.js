@@ -16,34 +16,7 @@ const createCampaignButtons =
 const storageKey =
     "nythra_campaigns";
 
-let campaigns =
-    loadCampaigns();
-
-function loadCampaigns() {
-    const savedCampaigns =
-        localStorage.getItem(
-            storageKey
-        );
-
-    if (!savedCampaigns) {
-        return [];
-    }
-
-    try {
-        return JSON.parse(
-            savedCampaigns
-        );
-    } catch {
-        return [];
-    }
-}
-
-function saveCampaigns() {
-    localStorage.setItem(
-        storageKey,
-        JSON.stringify(campaigns)
-    );
-}
+let campaigns = [];
 
 function formatDate(date) {
     return new Intl.DateTimeFormat(
@@ -123,7 +96,7 @@ function createCampaignCard(campaign) {
         "campaign-card-status";
 
     status.textContent =
-        "Em preparação";
+        campaign.role === "player" ? "Jogador vinculado" : "Mestre";
 
     footer.append(
         date,
@@ -138,8 +111,11 @@ function createCampaignCard(campaign) {
     );
 
     function openCampaign() {
-    window.location.href =
-        `./campaign-dashboard.html?id=${encodeURIComponent(campaign.id)}`;
+    if (campaign.role === 'player') {
+        window.alert('Você está vinculado a esta campanha. O escudo com notas e preparações é exclusivo do mestre.');
+        return;
+    }
+    window.location.href = `./campaign-dashboard.html?id=${encodeURIComponent(campaign.id)}`;
 }
 
 card.tabIndex = 0;
@@ -190,7 +166,7 @@ function renderCampaigns() {
     });
 }
 
-function askForCampaign() {
+async function askForCampaign() {
     const name =
         window.prompt(
             "Qual é o nome da campanha?"
@@ -205,21 +181,45 @@ function askForCampaign() {
             "Escreva uma descrição curta para ela (opcional):"
         );
 
-    const campaign = {
-        id: crypto.randomUUID(),
-        name: name.trim(),
-        description:
-            description?.trim() || "",
-        createdAt:
-            new Date().toISOString()
-    };
-
-    campaigns.unshift(campaign);
-
-    saveCampaigns();
-
+    try {
+        await apiRequest('/campaigns', { method: 'POST', body: JSON.stringify({ name: name.trim(), description: description?.trim() || '' }) });
+        await refreshCampaigns();
+    } catch (error) { window.alert(error.message); }
+}
+async function refreshCampaigns() {
+    const result = await apiRequest('/campaigns');
+    campaigns = result.campanhas;
     renderCampaigns();
 }
+async function initializeCampaigns() {
+    try {
+        const account = await pegarUsuarioLogado();
+        if (!account) { location.href = './login.html'; return; }
+        document.querySelector('#account-id').textContent = `Seu ID de jogador: ${account.usuario.id}`;
+        await refreshCampaigns();
+        const local = JSON.parse(localStorage.getItem('nythra_campaigns') || '[]');
+        if (Array.isArray(local) && local.length) document.querySelector('#import-campaigns').hidden = false;
+    } catch (error) { document.querySelector('#campaign-message').textContent = error.message; }
+}
+document.querySelector('#import-campaigns').addEventListener('click', async (event) => {
+    if (!confirm('Importar as campanhas deste navegador para sua conta? Jogadores anotados manualmente precisarão ser vinculados por ID.')) return;
+    event.target.disabled = true;
+    try {
+        const local = JSON.parse(localStorage.getItem('nythra_campaigns') || '[]');
+        const key = `nythra_imported_${(await pegarUsuarioLogado()).usuario.id}`;
+        const imported = JSON.parse(localStorage.getItem(key) || '[]');
+        for (const campaign of local) {
+            if (imported.includes(campaign.id)) continue;
+            await apiRequest('/campaigns', { method: 'POST', body: JSON.stringify(campaign) });
+            imported.push(campaign.id);
+            localStorage.setItem(key, JSON.stringify(imported));
+        }
+        event.target.hidden = true;
+        await refreshCampaigns();
+        document.querySelector('#campaign-message').textContent = 'Campanhas importadas. A cópia local foi preservada.';
+    } catch (error) { document.querySelector('#campaign-message').textContent = error.message; }
+    finally { event.target.disabled = false; }
+});
 
 createCampaignButtons.forEach((button) => {
     button.addEventListener(
@@ -228,4 +228,4 @@ createCampaignButtons.forEach((button) => {
     );
 });
 
-renderCampaigns();
+initializeCampaigns();

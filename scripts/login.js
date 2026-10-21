@@ -99,3 +99,17 @@ function limparMensagem() {
         "form-message-success"
     );
 }
+const resendButton = document.createElement('button');
+resendButton.type = 'button';
+resendButton.className = 'button';
+resendButton.textContent = 'Reenviar confirmação de e-mail';
+loginForm.append(resendButton);
+resendButton.addEventListener('click', async () => {
+    resendButton.disabled = true;
+    try {
+        const result = await apiRequest('/email/resend', { method: 'POST',
+            body: JSON.stringify({ email: emailInput.value.trim(), password: passwordInput.value }) });
+        mostrarMensagem(result.mensagem, 'sucesso');
+    } catch (error) { mostrarMensagem(error.message, 'erro'); }
+    finally { resendButton.disabled = false; }
+});

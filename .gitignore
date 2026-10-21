@@ -30,3 +30,4 @@ uploads/
 # Sistema
 .DS_Store
 Thumbs.db
+!server/migrations/*.sql

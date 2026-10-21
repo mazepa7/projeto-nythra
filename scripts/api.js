@@ -1,235 +1,110 @@
-const API_URL = "http://localhost:3000";
+const API_URL = window.NYTHRA_API_URL || "http://localhost:3000";
 
-// ==============================
 // TOKEN
-// ==============================
-
 function salvarToken(token) {
     localStorage.setItem("nythra_token", token);
 }
-
 function pegarToken() {
     return localStorage.getItem("nythra_token");
 }
-
 function removerToken() {
     localStorage.removeItem("nythra_token");
 }
 
-
-// ==============================
-// CADASTRO
-// ==============================
-
-async function cadastrarUsuario(username, email, password) {
-    const resposta = await fetch(`${API_URL}/api/users`, {
-        method: "POST",
-
-        headers: {
-            "Content-Type": "application/json"
-        },
-
-        body: JSON.stringify({
-            username,
-            email,
-            password
-        })
-    });
-
-    const dados = await resposta.json();
-
-    if (!resposta.ok) {
-        throw new Error(dados.mensagem);
-    }
-
-    return dados;
-}
-
-
-// ==============================
-// LOGIN
-// ==============================
-
-async function fazerLogin(email, password) {
-    const resposta = await fetch(`${API_URL}/api/login`, {
-        method: "POST",
-
-        headers: {
-            "Content-Type": "application/json"
-        },
-
-        body: JSON.stringify({
-            email,
-            password
-        })
-    });
-
-    const dados = await resposta.json();
-
-    if (!resposta.ok) {
-        throw new Error(dados.mensagem);
-    }
-
-    salvarToken(dados.token);
-
-    return dados;
-}
-
-
-// ==============================
-// USUÁRIO LOGADO
-// ==============================
-
-async function pegarUsuarioLogado() {
+// Requisições da API. Os erros mantêm o status para a interface tratar 429.
+async function apiRequest(path, options = {}) {
     const token = pegarToken();
-
-    if (!token) {
-        return null;
-    }
-
-    const resposta = await fetch(`${API_URL}/api/me`, {
+    const response = await fetch(`${API_URL}/api${path}`, {
+        ...options,
         headers: {
-            Authorization: `Bearer ${token}`
+            "Content-Type": "application/json",
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            ...options.headers
         }
     });
-
-    if (!resposta.ok) {
-        removerToken();
-        return null;
+    let data;
+    try {
+        data = await response.json();
+    } catch {
+        const error = new Error("O servidor retornou uma resposta inesperada. Tente novamente.");
+        error.status = response.status;
+        throw error;
     }
-
-    return await resposta.json();
+    if (!response.ok) {
+        const error = new Error(data.mensagem || "Não foi possível concluir a solicitação.");
+        error.status = response.status;
+        const retryAfter = Number(response.headers.get("Retry-After"));
+        error.retryAfter = Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter : null;
+        throw error;
+    }
+    return data;
 }
 
-
-// ==============================
-// LISTAR FICHAS
-// ==============================
-
-async function listarFichas() {
-    const resposta = await fetch(`${API_URL}/api/sheets`, {
-        headers: {
-            Authorization: `Bearer ${pegarToken()}`
-        }
-    });
-
-    const dados = await resposta.json();
-
-    if (!resposta.ok) {
-        throw new Error(dados.mensagem);
-    }
-
-    return dados;
-}
-
-
-// ==============================
-// BUSCAR UMA FICHA
-// ==============================
-
-async function buscarFicha(id) {
-    const resposta = await fetch(`${API_URL}/api/sheets/${id}`, {
-        headers: {
-            Authorization: `Bearer ${pegarToken()}`
-        }
-    });
-
-    const dados = await resposta.json();
-
-    if (!resposta.ok) {
-        throw new Error(dados.mensagem);
-    }
-
-    return dados;
-}
-
-
-// ==============================
-// CRIAR FICHA
-// ==============================
-
-async function criarFicha(system, name, sheetData = {}) {
-    const resposta = await fetch(`${API_URL}/api/sheets`, {
+// CADASTRO E CONFIRMAÇÃO
+async function cadastrarUsuario(username, email, password) {
+    return apiRequest("/users", {
         method: "POST",
-
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${pegarToken()}`
-        },
-
-        body: JSON.stringify({
-            system,
-            name,
-            sheetData
-        })
+        body: JSON.stringify({ username, email, password })
     });
-
-    const dados = await resposta.json();
-
-    if (!resposta.ok) {
-        throw new Error(dados.mensagem);
-    }
-
-    return dados;
+}
+async function confirmarEmail(email, code) {
+    return apiRequest("/email/verify", {
+        method: "POST",
+        body: JSON.stringify({ email, code })
+    });
+}
+async function reenviarCodigo(email, password) {
+    return apiRequest("/email/resend", {
+        method: "POST",
+        body: JSON.stringify({ email, password })
+    });
 }
 
-
-// ==============================
-// SALVAR FICHA
-// ==============================
-
-async function salvarFicha(id, name, sheetData) {
-    const resposta = await fetch(`${API_URL}/api/sheets/${id}`, {
-        method: "PUT",
-
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${pegarToken()}`
-        },
-
-        body: JSON.stringify({
-            name,
-            sheetData
-        })
+// LOGIN
+async function fazerLogin(email, password) {
+    const data = await apiRequest("/login", {
+        method: "POST",
+        body: JSON.stringify({ email, password })
     });
-
-    const dados = await resposta.json();
-
-    if (!resposta.ok) {
-        throw new Error(dados.mensagem);
-    }
-
-    return dados;
+    salvarToken(data.token);
+    return data;
 }
-
-
-// ==============================
-// EXCLUIR FICHA
-// ==============================
-
-async function excluirFicha(id) {
-    const resposta = await fetch(`${API_URL}/api/sheets/${id}`, {
-        method: "DELETE",
-
-        headers: {
-            Authorization: `Bearer ${pegarToken()}`
+async function pegarUsuarioLogado() {
+    if (!pegarToken()) return null;
+    try {
+        return await apiRequest("/me");
+    } catch (error) {
+        // Uma indisponibilidade de rede não encerra uma sessão válida.
+        if (error.status === 401 || error.status === 403) {
+            removerToken();
+            return null;
         }
-    });
-
-    const dados = await resposta.json();
-
-    if (!resposta.ok) {
-        throw new Error(dados.mensagem);
+        throw error;
     }
-
-    return dados;
 }
 
-
-// ==============================
-// LOGOUT
-// ==============================
-
+// FICHAS — mesmas funções e parâmetros já utilizados no projeto.
+async function listarFichas() {
+    return apiRequest("/sheets");
+}
+async function buscarFicha(id) {
+    return apiRequest(`/sheets/${encodeURIComponent(id)}`);
+}
+async function criarFicha(system, name, sheetData = {}) {
+    return apiRequest("/sheets", {
+        method: "POST",
+        body: JSON.stringify({ system, name, sheetData })
+    });
+}
+async function salvarFicha(id, name, sheetData) {
+    return apiRequest(`/sheets/${encodeURIComponent(id)}`, {
+        method: "PUT",
+        body: JSON.stringify({ name, sheetData })
+    });
+}
+async function excluirFicha(id) {
+    return apiRequest(`/sheets/${encodeURIComponent(id)}`, { method: "DELETE" });
+}
 function logout() {
     removerToken();
 }

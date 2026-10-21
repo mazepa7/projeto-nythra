@@ -62,3 +62,4 @@ a {
     background: var(--border);
     border-radius: 999px;
 }
+[hidden] { display: none !important; }
