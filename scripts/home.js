@@ -58,11 +58,13 @@ async function verificarLogin() {
         */
 
         if (masterButton) {
-
-            masterButton.href =
-                "pages/sheets.html";
-
-        }
+    const estaEmPages =
+        window.location.pathname.includes("/pages/");
+            
+    masterButton.href = estaEmPages
+        ? "campaigns.html"
+        : "pages/campaigns.html";
+}
 
 
     } catch (erro) {

@@ -26,7 +26,7 @@ async function createAccount(username) {
     return { id: response.body.usuario.id, email, token: sent.at(-1).token };
 }
 async function verifyAndLogin(user) {
-    await request(app).post('/api/email/verify').send({ token: user.token }).expect(200);
+    await request(app).post('/api/email/verify').send({ email: user.email, code: user.token }).expect(200);
     user.auth = (await request(app).post('/api/login').send({ email: user.email, password }).expect(200)).body.token;
 }
 const auth = user => ({ Authorization: `Bearer ${user.auth}` });
@@ -46,13 +46,13 @@ test('accounts, one-use confirmation, expiry, resend and campaign authorization'
     const stored = await database.query('SELECT token_hash FROM email_verifications WHERE user_id = $1', [master.id]);
     assert.notEqual(stored.rows[0].token_hash, master.token);
     await verifyAndLogin(master);
-    await request(app).post('/api/email/verify').send({ token: master.token }).expect(400);
+    await request(app).post('/api/email/verify').send({ email: master.email, code: master.token }).expect(400);
     player = await createAccount('player');
     await database.query("UPDATE email_verifications SET expires_at = NOW() - INTERVAL '1 second', sent_at = NOW() - INTERVAL '2 minutes' WHERE user_id = $1", [player.id]);
-    await request(app).post('/api/email/verify').send({ token: player.token }).expect(400);
+    await request(app).post('/api/email/verify').send({ email: player.email, code: player.token }).expect(400);
     await request(app).post('/api/email/resend').send({ email: player.email, password: 'wrong' }).expect(401);
     await request(app).post('/api/email/resend').send({ email: player.email, password }).expect(200);
-    await request(app).post('/api/email/verify').send({ token: player.token }).expect(400);
+    await request(app).post('/api/email/verify').send({ email: player.email, code: player.token }).expect(400);
     player.token = sent.at(-1).token;
     await verifyAndLogin(player);
     outsider = await createAccount('outsider');
@@ -90,5 +90,19 @@ test('SMTP failure leaves recoverable unverified account and does not expose tok
     mailFails = false;
     await request(app).post('/api/email/resend').send({ email: 'offline@example.com', password }).expect(200);
     await request(app).post('/api/email/resend').send({ email: 'offline@example.com', password }).expect(429);
-    await request(app).post('/api/email/verify').send({ token: sent.at(-1).token }).expect(200);
+    await request(app).post('/api/email/verify').send({ email: 'offline@example.com', code: sent.at(-1).token }).expect(200);
+});
+
+test('verification codes are tied to the account and blocked after five incorrect attempts', async () => {
+    const user = await createAccount('tentativas');
+    const incorrect = user.token === '000000' ? '000001' : '000000';
+    for (let attempt = 1; attempt <= 5; attempt++) {
+        await request(app).post('/api/email/verify')
+            .send({ email: user.email, code: incorrect })
+            .expect(attempt === 5 ? 429 : 400);
+    }
+    await request(app).post('/api/email/verify')
+        .send({ email: user.email, code: user.token }).expect(429);
+    const result = await database.query('SELECT attempts FROM email_verifications WHERE user_id = $1', [user.id]);
+    assert.equal(result.rows[0].attempts, 5);
 });

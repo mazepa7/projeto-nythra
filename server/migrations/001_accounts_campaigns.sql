@@ -31,5 +31,8 @@ BEGIN
  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(), PRIMARY KEY(campaign_id, user_id)
 )$table$, user_id_type);
 END $migration$;
+-- Registros legados de confirmação por link não são códigos de seis dígitos.
+ALTER TABLE email_verifications ADD COLUMN IF NOT EXISTS attempts INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE email_verifications ADD COLUMN IF NOT EXISTS verification_type TEXT NOT NULL DEFAULT 'link';
 CREATE INDEX IF NOT EXISTS campaign_players_user_idx ON campaign_players(user_id);
 COMMIT;

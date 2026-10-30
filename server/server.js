@@ -1166,11 +1166,15 @@ app.use((error, req, res, next) => {
 });
 
 if (require.main === module) {
+    if (!process.env.JWT_SECRET) {
+        throw new Error("Configure JWT_SECRET antes de iniciar.");
+    }
 
-    if (!process.env.JWT_SECRET) throw new Error('Configure JWT_SECRET antes de iniciar.');
-
-    app.listen(PORT, () => console.log(`Servidor Nythra rodando em http://localhost:${PORT}`));
-
+    app.listen(PORT, () => {
+        console.log(
+            `Servidor Nythra rodando em http://localhost:${PORT}`
+        );
+    });
 }
 
 module.exports = app;

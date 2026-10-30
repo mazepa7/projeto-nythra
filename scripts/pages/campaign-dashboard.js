@@ -1,4 +1,3 @@
-const storageKey = "nythra_campaigns";
 
 const params = new URLSearchParams(
   window.location.search
@@ -278,26 +277,75 @@ const participantMaxHealthInput =
 ======================================== */
 
 let saveTimer = null;
-
 let editingNoteId = null;
 
 let campaign = null;
 let saveQueue = Promise.resolve();
-function updateCurrentCampaign() {
-  if (!campaign) return Promise.resolve(false);
-  const snapshot = JSON.stringify(campaign);
-  document.querySelector('#campaign-save-status').textContent = 'Salvando...';
-  saveQueue = saveQueue.then(async () => {
-    try {
-      await apiRequest(`/campaigns/${encodeURIComponent(campaignId)}`, { method: 'PUT', body: snapshot });
-      document.querySelector('#campaign-save-status').textContent = 'Salvo';
-      return true;
-    } catch (error) {
-      document.querySelector('#campaign-save-status').textContent = `Alterações não salvas: ${error.message}`;
-      return false;
+let latestSave = 0;
+let campaignUnsaved = false;
+
+function mostrarStatusCampanha(texto) {
+    const elemento =
+        document.querySelector("#campaign-save-status") ||
+        notesStatus;
+
+    if (elemento) {
+        elemento.textContent = texto;
     }
-  });
-  return saveQueue;
+}
+
+function updateCurrentCampaign() {
+    if (!campaign) {
+        return Promise.resolve(false);
+    }
+
+    const saveNumber = ++latestSave;
+
+    const {
+        id,
+        name,
+        description,
+        createdAt,
+        updatedAt,
+        ...campaignData
+    } = campaign;
+
+    // Captura os dados agora, antes de entrar na fila.
+    const body = JSON.stringify(campaignData);
+
+    campaignUnsaved = true;
+    mostrarStatusCampanha("Salvando...");
+
+    saveQueue = saveQueue.then(async () => {
+        try {
+            await apiRequest(
+                `/campaigns/${encodeURIComponent(campaignId)}`,
+                {
+                    method: "PUT",
+                    body
+                }
+            );
+
+            // Uma gravação antiga não deve anunciar que
+            // alterações mais recentes já foram salvas.
+            if (saveNumber === latestSave) {
+                campaignUnsaved = false;
+                mostrarStatusCampanha("Salvo");
+            }
+
+            return true;
+        } catch (error) {
+            if (saveNumber === latestSave) {
+                mostrarStatusCampanha(
+                    `Alterações não salvas: ${error.message}`
+                );
+            }
+
+            return false;
+        }
+    });
+
+    return saveQueue;
 }
 
 /* ========================================
@@ -473,7 +521,7 @@ function renderSession() {
   );
 
   sessionNumber.textContent =
-    `Sessão ${currentSession.number}`;
+    `Nº ${currentSession.number}`;
   sessionTitle.textContent = currentSession.title;
   sessionStatus.textContent = statusLabel;
   sessionStatus.className =
@@ -549,16 +597,18 @@ function updateNotesCount() {
 }
 
 async function saveQuickNotes() {
-  if (!campaign) {
-    return;
-  }
+    if (!campaign) return;
 
-  campaign.quickNotes = quickNotes.value;
+    campaign.quickNotes = quickNotes.value;
 
-  const saved = await updateCurrentCampaign();
-  notesStatus.textContent = saved ? "Salvo" : "Falha ao salvar";
+    updateNotesCount();
 
-  updateNotesCount();
+    const saved = await updateCurrentCampaign();
+
+    notesStatus.textContent =
+        saved && !campaignUnsaved
+            ? "Salvo"
+            : "Existem alterações pendentes.";
 }
 
 function scheduleNotesSave() {
@@ -2110,11 +2160,79 @@ document.addEventListener(
 ======================================== */
 
 (async () => {
-  try {
-    if (!pegarToken()) { location.href = './login.html'; return; }
-    const result = await apiRequest(`/campaigns/${encodeURIComponent(campaignId)}`);
-    campaign = result.campanha;
-    loadCampaignDashboard();
-    document.querySelector('main').hidden = false;
-  } catch (error) { document.querySelector('#campaign-save-status').textContent = error.message; }
+    const main = document.querySelector("main");
+
+    if (main) main.inert = true;
+
+    try {
+        if (!campaignId) {
+            location.href = "./campaigns.html";
+            return;
+        }
+
+        const usuario = await pegarUsuarioLogado();
+
+        if (!usuario?.usuario) {
+            location.href = "./login.html";
+            return;
+        }
+
+        const result = await apiRequest(
+            `/campaigns/${encodeURIComponent(campaignId)}`
+        );
+
+        campaign = result.campanha;
+
+campaign.quickNotes ??= "";
+campaign.players = Array.isArray(campaign.players)
+    ? campaign.players
+    : [];
+
+campaign.maps = Array.isArray(campaign.maps)
+    ? campaign.maps
+    : [];
+
+campaign.notes = Array.isArray(campaign.notes)
+    ? campaign.notes
+    : [];
+
+campaign.activeCombat ??= null;
+
+        loadCampaignDashboard();
+
+        if (main) {
+            main.hidden = false;
+            main.inert = false;
+        }
+
+        mostrarStatusCampanha("Salvo");
+
+        // O upload separado de mapas será implementado depois.
+        [addMapButton, emptyAddMapButton].forEach((button) => {
+            if (button) {
+                button.disabled = true;
+                button.title = "Upload de mapas em implementação.";
+            }
+        });
+    } catch (error) {
+        console.error("Erro ao carregar campanha:", error);
+
+        mostrarStatusCampanha(error.message);
+        window.alert(error.message);
+
+        if (error.status === 401) {
+            location.href = "./login.html";
+        }
+    }
 })();
+
+window.addEventListener("beforeunload", (event) => {
+    const notasPendentes =
+        campaign &&
+        quickNotes.value !== (campaign.quickNotes || "");
+
+    if (campaignUnsaved || notasPendentes) {
+        event.preventDefault();
+        event.returnValue = "";
+    }
+});

@@ -8,7 +8,7 @@ Plataforma de fichas de RPG com frontend HTML/CSS/JavaScript e API Express/Postg
 - Campanhas, sessões, mapas, notas e combates persistidos por conta no banco.
 - O mestre vincula uma conta existente pelo ID exibido na página Campanhas; apenas contas com e-mail confirmado podem ser adicionadas. O vínculo é único por campanha e pode ser removido pelo mestre.
 - Jogadores veem as campanhas às quais estão vinculados na lista. O escudo, as preparações e as notas continuam exclusivos do mestre. O vínculo da conta não compartilha automaticamente as fichas pessoais do jogador.
-- Confirmação de e-mail por link com token aleatório, hash no banco, validade de uma hora e uso único. Login e rotas autenticadas exigem confirmação, inclusive para tokens antigos.
+- Confirmação de e-mail por código de seis dígitos, hash no banco, validade de dez minutos e uso único. Login e rotas autenticadas exigem confirmação, inclusive para tokens antigos.
 - Reenvio de confirmação com e-mail e senha na página de login, intervalo mínimo de um minuto e limite de tentativas por IP.
 
 ## Executar localmente
@@ -49,7 +49,7 @@ Após entrar, abra Campanhas e use **Importar campanhas deste navegador**. A aç
 ## Testar o fluxo completo
 
 1. Cadastre duas contas com caixas de e-mail acessíveis. Confira que o login fica bloqueado antes da confirmação.
-2. Abra cada e-mail e clique em **Confirmar meu e-mail** na página do link. Tente reutilizar o link: ele deve ser recusado.
+2. Abra cada e-mail e informe o código de seis dígitos na tela de confirmação. Tente reutilizar o código: ele deve ser recusado.
 3. Entre nas duas contas usando navegadores ou perfis separados. Na conta do jogador, copie o ID mostrado em Campanhas.
 4. Na conta do mestre, crie/abra uma campanha e use **Vincular jogador** com esse ID. Uma segunda tentativa com o mesmo ID deve ser recusada.
 5. Atualize Campanhas na conta do jogador: o vínculo deve aparecer. O jogador não pode abrir ou alterar o escudo do mestre pela API.
@@ -61,7 +61,7 @@ cd server
 npm test
 ```
 
-Os testes usam PostgreSQL embarcado via PGlite e DOM via jsdom, sem precisar do banco de desenvolvimento. Exercitam migração repetível, cadastro, confirmação, expiração, reenvio, falha de SMTP, permissões e persistência de sessões na interface. O transporte SMTP é simulado; a entrega real de mensagens e o layout visual precisam ser conferidos no ambiente configurado.
+Os testes usam PostgreSQL embarcado via PGlite e DOM via jsdom, sem precisar do banco de desenvolvimento. Exercitam migração repetível, cadastro, confirmação por código, expiração, reenvio, falha de SMTP, permissões e persistência de sessões na interface. O transporte SMTP é simulado; a entrega real de mensagens e o layout visual precisam ser conferidos no ambiente configurado.
 
 ## Limites desta etapa
 

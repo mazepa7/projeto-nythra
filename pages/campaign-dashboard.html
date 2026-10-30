@@ -121,7 +121,6 @@
         <section class="master-card session-card">
           <div class="master-card-heading">
             <div>
-              <p class="eyebrow">Sessão</p>
               <h2>Sessão atual</h2>
             </div>
 
@@ -164,7 +163,6 @@
           <div class="master-card-heading">
             <div>
               <p class="eyebrow">Anotações</p>
-              <h2>Notas rápidas</h2>
             </div>
 
             <span id="notes-status" class="save-indicator">
@@ -519,9 +517,14 @@
       </div>
     </main>
 
-    <div id="session-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="session-modal-title" hidden>
+    <div id="session-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="session-modal-title" aria-describedby="session-modal-description" hidden>
       <div class="modal-card">
-        <header class="modal-header"><h2 id="session-modal-title">Criar sessão</h2>
+        <header class="modal-header">
+          <div>
+            <p class="eyebrow">Preparação</p>
+            <h2 id="session-modal-title">Criar sessão</h2>
+            <p id="session-modal-description">Organize os objetivos e os detalhes do próximo encontro.</p>
+          </div>
           <button id="close-session-modal" type="button" class="modal-close-button" aria-label="Fechar">×</button></header>
         <form id="session-form">
           <div class="form-field"><label for="session-title-input">Título</label><input id="session-title-input" required maxlength="120"></div>
@@ -571,8 +574,8 @@
 
         <form id="link-player-form">
           <div class="form-field"><label for="player-id">ID do jogador</label>
-          <input id="player-id" type="text" required maxlength="36" placeholder="Cole o ID completo da conta">
-          <p>Peça ao jogador o ID exibido na página Campanhas. Ele precisa confirmar o e-mail primeiro.</p></div>
+          <input id="player-id" aria-describedby="player-id-help" type="text" required maxlength="36" placeholder="Cole o ID completo da conta">
+          <p id="player-id-help">Peça ao jogador o ID exibido na página Campanhas. Ele precisa confirmar o e-mail primeiro.</p></div>
           <p id="player-link-message" role="status"></p>
           <footer class="modal-actions">
             <button
